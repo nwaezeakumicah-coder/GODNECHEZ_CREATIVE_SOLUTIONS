@@ -15,9 +15,17 @@
 
 :root{
 
---black:#0B0F14;
+--blue:#0A3D91;
+
+--navy:#061B3A;
+
+--white:#FFFFFF;
 
 --yellow:#FFD400;
+
+--red:#E63946;
+
+--gray:#6B7280;
 
 }
 
@@ -37,9 +45,9 @@ font-family:Arial,sans-serif;
 
 body{
 
-background:#fff;
+background:var(--white);
 
-color:#111;
+color:var(--navy);
 
 }
 
@@ -53,11 +61,11 @@ position:fixed;
 top:0;
 width:100%;
 
-background:rgba(255,255,255,.95);
+background:rgba(10,61,145,.95);
 
 backdrop-filter:blur(15px);
 
-border-bottom:1px solid #eee;
+border-bottom:1px solid rgba(255,255,255,.2);
 
 z-index:1000;
 
@@ -122,6 +130,8 @@ font-weight:900;
 
 line-height:1;
 
+color:white;
+
 }
 
 
@@ -159,7 +169,7 @@ gap:22px;
 
 text-decoration:none;
 
-color:#111;
+color:white;
 
 font-weight:bold;
 
@@ -171,7 +181,7 @@ font-size:14px;
 
 .nav a:hover{
 
-color:#E63946;
+color:var(--yellow);
 
 }
 
@@ -182,9 +192,21 @@ color:#E63946;
 
 background:var(--yellow);
 
+color:var(--navy)!important;
+
 padding:10px 18px;
 
 border-radius:30px;
+
+}
+
+
+
+.admin-link:hover{
+
+background:var(--red);
+
+color:white!important;
 
 }
 
@@ -199,16 +221,19 @@ font-size:28px;
 
 cursor:pointer;
 
+color:white;
+
 }
+
 
 /* HERO */
 
 
 .hero{
 
-background:#f5f5f5;
+background:#f5f8ff;
 
-padding:90px 20px;
+padding:120px 20px 90px;
 
 text-align:center;
 
@@ -226,12 +251,9 @@ font-size:3rem;
 
 .hero span{
 
-color:var(--yellow);
+color:var(--blue);
 
 }
-
-
-
 
 /* FORM */
 
@@ -250,11 +272,13 @@ padding:60px 20px;
 
 .box{
 
-background:#f5f5f5;
+background:#f5f8ff;
 
 padding:30px;
 
 border-radius:20px;
+
+border-top:5px solid var(--yellow);
 
 }
 
@@ -263,6 +287,8 @@ border-radius:20px;
 .box h2{
 
 margin-bottom:20px;
+
+color:var(--navy);
 
 }
 
@@ -287,6 +313,15 @@ font-size:15px;
 
 
 
+input:focus,
+textarea:focus{
+
+outline:2px solid var(--blue);
+
+}
+
+
+
 textarea{
 
 height:150px;
@@ -297,9 +332,13 @@ resize:none;
 
 
 
+
+
 button{
 
 background:var(--yellow);
+
+color:var(--navy);
 
 border:none;
 
@@ -311,6 +350,8 @@ font-weight:bold;
 
 cursor:pointer;
 
+transition:.3s;
+
 }
 
 
@@ -318,6 +359,10 @@ cursor:pointer;
 button:hover{
 
 transform:scale(1.03);
+
+background:var(--red);
+
+color:white;
 
 }
 
@@ -328,7 +373,7 @@ transform:scale(1.03);
 
 footer{
 
-background:#171B24;
+background:var(--navy);
 
 color:white;
 
@@ -342,12 +387,49 @@ text-align:center;
 
 
 
+
 @media(max-width:768px){
 
 
 .nav{
 
-display:none;
+position:fixed;
+
+top:70px;
+
+right:-100%;
+
+width:250px;
+
+height:100vh;
+
+background:var(--blue);
+
+display:flex;
+
+flex-direction:column;
+
+padding:30px;
+
+gap:25px;
+
+transition:.4s;
+
+}
+
+
+
+.nav a{
+
+color:white;
+
+}
+
+
+
+.nav.show{
+
+right:0;
 
 }
 
@@ -468,10 +550,6 @@ Contact
 
 
 
-
-
-
-
 <section class="hero">
 
 
@@ -583,6 +661,21 @@ Submit Review
 
 
 const API="http://localhost:5000";
+
+
+
+function toggleMenu(){
+
+
+document
+
+.getElementById("nav")
+
+.classList.toggle("show");
+
+
+}
+
 
 
 

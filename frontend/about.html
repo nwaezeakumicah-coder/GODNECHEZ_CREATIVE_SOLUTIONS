@@ -15,9 +15,11 @@
 
 :root{
 
---black:#0B0F14;
+--blue:#0A3D91;
+--navy:#061B3A;
+--white:#FFFFFF;
 --yellow:#FFD400;
---dark:#171B24;
+--red:#E63946;
 --gray:#6B7280;
 
 }
@@ -40,9 +42,9 @@ font-family:Arial,sans-serif;
 
 body{
 
-background:white;
+background:var(--white);
 
-color:var(--black);
+color:var(--navy);
 
 }
 
@@ -61,28 +63,11 @@ top:0;
 
 width:100%;
 
-background:rgba(255,255,255,.95);
+background:rgba(10,61,145,.95);
 
 backdrop-filter:blur(15px);
 
-border-bottom:1px solid #eee;
-
-z-index:1000;
-
-}
-
-
-header{
-
-position:fixed;
-top:0;
-width:100%;
-
-background:rgba(255,255,255,.95);
-
-backdrop-filter:blur(15px);
-
-border-bottom:1px solid #eee;
+border-bottom:1px solid rgba(255,255,255,.2);
 
 z-index:1000;
 
@@ -105,6 +90,8 @@ justify-content:space-between;
 align-items:center;
 
 }
+
+
 
 
 
@@ -147,6 +134,8 @@ font-weight:900;
 
 line-height:1;
 
+color:var(--white);
+
 }
 
 
@@ -184,7 +173,7 @@ gap:22px;
 
 text-decoration:none;
 
-color:#111;
+color:var(--white);
 
 font-weight:bold;
 
@@ -196,7 +185,7 @@ font-size:14px;
 
 .nav a:hover{
 
-color:#E63946;
+color:var(--yellow);
 
 }
 
@@ -207,9 +196,21 @@ color:#E63946;
 
 background:var(--yellow);
 
+color:var(--navy)!important;
+
 padding:10px 18px;
 
 border-radius:30px;
+
+}
+
+
+
+.admin-link:hover{
+
+background:var(--red);
+
+color:white!important;
 
 }
 
@@ -223,6 +224,8 @@ display:none;
 font-size:28px;
 
 cursor:pointer;
+
+color:white;
 
 }
 
@@ -246,7 +249,9 @@ rgba(255,212,0,.2),
 
 transparent 35%),
 
-#fff;
+var(--blue);
+
+color:white;
 
 }
 
@@ -272,12 +277,13 @@ color:var(--yellow);
 
 margin-top:20px;
 
-color:var(--gray);
+color:white;
 
 font-size:18px;
 
-}
+opacity:.9;
 
+}
 
 
 
@@ -295,6 +301,7 @@ padding:70px 20px;
 
 
 
+
 .title{
 
 text-align:center;
@@ -303,6 +310,14 @@ margin-bottom:40px;
 
 }
 
+
+
+
+.title span{
+
+color:var(--blue);
+
+}
 
 
 
@@ -325,11 +340,13 @@ align-items:center;
 
 .story-box{
 
-background:#f5f5f5;
+background:#f5f8ff;
 
 padding:35px;
 
 border-radius:25px;
+
+border:1px solid rgba(10,61,145,.1);
 
 }
 
@@ -338,6 +355,8 @@ border-radius:25px;
 .story-box h2{
 
 margin-bottom:15px;
+
+color:var(--blue);
 
 }
 
@@ -350,10 +369,6 @@ color:#555;
 line-height:1.7;
 
 }
-
-
-
-
 
 /* MISSION */
 
@@ -372,11 +387,13 @@ gap:25px;
 
 .card{
 
-background:#f5f5f5;
+background:#f5f8ff;
 
 padding:30px;
 
 border-radius:20px;
+
+border:1px solid rgba(10,61,145,.08);
 
 }
 
@@ -386,7 +403,7 @@ border-radius:20px;
 
 margin-bottom:15px;
 
-color:var(--yellow);
+color:var(--blue);
 
 }
 
@@ -421,7 +438,7 @@ gap:25px;
 
 .member{
 
-background:#f5f5f5;
+background:#f5f8ff;
 
 border-radius:20px;
 
@@ -436,6 +453,8 @@ transition:.3s;
 .member:hover{
 
 transform:translateY(-8px);
+
+box-shadow:0 15px 35px rgba(10,61,145,.15);
 
 }
 
@@ -465,6 +484,8 @@ padding:20px;
 
 margin-bottom:8px;
 
+color:var(--navy);
+
 }
 
 
@@ -488,6 +509,8 @@ margin:10px 0;
 padding:6px 15px;
 
 background:var(--yellow);
+
+color:var(--navy);
 
 border-radius:20px;
 
@@ -516,15 +539,23 @@ line-height:1.6;
 
 .cta{
 
-background:var(--black);
+background:var(--navy);
 
-color:white;
+color:var(--white);
 
 padding:45px;
 
 border-radius:25px;
 
 text-align:center;
+
+}
+
+
+
+.cta h2{
+
+margin-bottom:15px;
 
 }
 
@@ -538,7 +569,7 @@ margin-top:20px;
 
 background:var(--yellow);
 
-color:black;
+color:var(--navy);
 
 padding:14px 30px;
 
@@ -552,11 +583,21 @@ font-weight:bold;
 
 
 
+.cta a:hover{
+
+background:var(--red);
+
+color:white;
+
+}
+
+
+
 
 
 footer{
 
-background:var(--dark);
+background:var(--navy);
 
 color:white;
 
@@ -588,13 +629,21 @@ height:100vh;
 
 width:250px;
 
-background:white;
+background:var(--blue);
 
 flex-direction:column;
 
 padding:30px;
 
 transition:.4s;
+
+}
+
+
+
+.nav a{
+
+color:white;
 
 }
 
@@ -731,9 +780,6 @@ Contact
 </header>
 
 
-
-
-
 <section class="hero">
 
 
@@ -758,12 +804,6 @@ Creative solutions that build memorable brands.
 
 
 </section>
-
-
-
-
-
-
 
 <section>
 

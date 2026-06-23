@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Admin</title>
+
+
+<style>
+
+body{
+
+font-family:Arial, sans-serif;
+
+background:#0B0F14;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+height:100vh;
+
+}
+
+
+.container{
+
+background:white;
+
+padding:30px;
+
+width:350px;
+
+border-radius:10px;
+
+}
+
+
+input{
+
+width:100%;
+
+padding:12px;
+
+margin:10px 0;
+
+}
+
+
+button{
+
+width:100%;
+
+padding:12px;
+
+background:#0f4cb4;
+
+border:none;
+
+cursor:pointer;
+
+font-weight:bold;
+
+}
+
+
+#message{
+
+margin-top:15px;
+
+}
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<div class="container">
+
+
+<h2>Create Admin Account</h2>
+
+
+<input id="username" placeholder="Username">
+
+
+<input id="email" placeholder="Email">
+
+
+<input id="password" type="password" placeholder="Password">
+
+
+<button onclick="registerAdmin()">
+
+Create Account
+
+</button>
+
+
+
+<p id="message"></p>
+
+
+</div>
+
+
+
+
+
+
+<script>
+
+
+async function registerAdmin(){
+
+
+
+const data={
+
+
+username:document.getElementById("username").value,
+
+
+email:document.getElementById("email").value,
+
+
+password:document.getElementById("password").value
+
+
+};
+
+
+
+
+
+const res = await fetch(
+
+"http://localhost:5000/api/admin/register",
+
+{
+
+
+method:"POST",
+
+
+headers:{
+
+
+"Content-Type":"application/json"
+
+
+},
+
+
+body:JSON.stringify(data)
+
+
+}
+
+
+);
+
+
+
+
+
+
+const result = await res.json();
+
+
+
+
+
+document.getElementById("message").innerHTML = result.message;
+
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

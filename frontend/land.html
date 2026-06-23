@@ -14,13 +14,15 @@
 
 :root{
 
---black:#0B0F14;
+--blue:#0A3D91;
+--navy:#061B3A;
+--white:#FFFFFF;
 --yellow:#FFD400;
---blue:#38BDF8;
---white:#ffffff;
---gray:#6B7280;
+--red:#E63946;
+--gray:#D1D5DB;
 
 }
+
 
 
 *{
@@ -31,6 +33,7 @@ box-sizing:border-box;
 font-family:Arial,sans-serif;
 
 }
+
 
 
 body{
@@ -47,17 +50,28 @@ overflow:hidden;
 
 background:
 
-radial-gradient(circle at top right,
-rgba(56,189,248,.18),
-transparent 35%),
+radial-gradient(
+
+circle at top right,
+
+rgba(255,212,0,.18),
+
+transparent 35%
+
+),
 
 linear-gradient(
+
 135deg,
-#ffffff,
-#f5f5f5
+
+var(--navy),
+
+var(--blue)
+
 );
 
-color:var(--black);
+
+color:var(--white);
 
 }
 
@@ -65,8 +79,7 @@ color:var(--black);
 
 
 
-
-/* animated background */
+/* ANIMATED BACKGROUND */
 
 
 body::before{
@@ -84,7 +97,7 @@ background:var(--yellow);
 
 filter:blur(180px);
 
-opacity:.25;
+opacity:.18;
 
 top:-100px;
 
@@ -115,7 +128,6 @@ transform:translate(200px,150px);
 
 
 }
-
 
 
 
@@ -170,8 +182,6 @@ transform:translateY(0);
 
 
 
-
-
 /* LOGO */
 
 
@@ -186,7 +196,7 @@ margin:auto;
 
 border-radius:50%;
 
-background:white;
+background:var(--white);
 
 padding:15px;
 
@@ -194,7 +204,7 @@ position:relative;
 
 box-shadow:
 
-0 30px 70px rgba(0,0,0,.15);
+0 30px 70px rgba(0,0,0,.35);
 
 
 animation:float 5s infinite;
@@ -220,10 +230,15 @@ border-radius:50%;
 background:
 
 linear-gradient(
+
 45deg,
+
 var(--yellow),
-var(--blue),
-transparent
+
+var(--red),
+
+var(--blue)
+
 );
 
 
@@ -233,7 +248,6 @@ animation:rotate 5s linear infinite;
 
 
 }
-
 
 
 
@@ -247,7 +261,6 @@ transform:rotate(360deg);
 }
 
 }
-
 
 
 
@@ -280,13 +293,6 @@ transform:translateY(-20px);
 }
 
 
-
-
-
-
-
-
-
 .brand{
 
 
@@ -297,6 +303,8 @@ font-size:3.5rem;
 font-weight:1000;
 
 letter-spacing:8px;
+
+color:var(--white);
 
 
 }
@@ -383,10 +391,10 @@ padding:18px 55px;
 border-radius:50px;
 
 
-background:var(--black);
+background:var(--yellow);
 
 
-color:white;
+color:var(--navy);
 
 
 text-decoration:none;
@@ -400,7 +408,7 @@ transition:.4s;
 
 box-shadow:
 
-0 10px 30px rgba(0,0,0,.2);
+0 10px 30px rgba(0,0,0,.3);
 
 
 }
@@ -414,9 +422,9 @@ box-shadow:
 transform:scale(1.1);
 
 
-background:var(--yellow);
+background:var(--white);
 
-color:black;
+color:var(--blue);
 
 
 }
@@ -429,7 +437,7 @@ color:black;
 
 
 
-/* particles */
+/* PARTICLES */
 
 
 .particle{
@@ -443,7 +451,7 @@ width:8px;
 height:8px;
 
 
-background:var(--blue);
+background:var(--yellow);
 
 
 border-radius:50%;
@@ -585,14 +593,6 @@ ENTER WEBSITE
 
 </div>
 
-
-
-
-
-
-
-
-
 <script>
 
 
@@ -634,4 +634,4 @@ document.body.appendChild(p);
 
 </body>
 
-</html> 
+</html>

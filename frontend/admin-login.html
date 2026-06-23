@@ -12,7 +12,7 @@
 
 :root{
 --black:#0B0F14;
---yellow:#FFD400;
+--yellow:#0f4cb4;
 --dark:#171B24;
 }
 
@@ -93,6 +93,19 @@ button:hover{
 transform:translateY(-2px);
 }
 
+.forgot{
+display:block;
+text-align:center;
+margin-top:15px;
+text-decoration:none;
+color:#555;
+font-size:14px;
+}
+
+.forgot:hover{
+color:black;
+}
+
 #message{
 margin-top:15px;
 text-align:center;
@@ -147,13 +160,21 @@ autocomplete="current-password"
 LOGIN
 </button>
 
+
+<a class="forgot" href="forgot-password.html">
+Forgot Password?
+</a>
+
+
 <p id="message"></p>
+
 
 <a class="back" href="index.html">
 ← Back to Website
 </a>
 
 </div>
+
 
 <script>
 
@@ -162,13 +183,18 @@ const API="http://localhost:5000";
 const token=localStorage.getItem("adminToken");
 
 if(token){
+
 window.location.replace("admin.html");
+
 }
+
 
 async function login(){
 
 const user=username.value.trim();
+
 const pass=password.value.trim();
+
 
 if(!user || !pass){
 
@@ -179,76 +205,124 @@ return;
 
 }
 
+
 const btn=document.getElementById("loginBtn");
 
+
 btn.disabled=true;
+
 btn.innerHTML="Logging in...";
+
 
 message.innerHTML="";
 
+
 try{
+
 
 const res=await fetch(
 
 API+"/api/admin/login",
 
 {
+
 method:"POST",
+
 headers:{
+
 "Content-Type":"application/json"
+
 },
+
 body:JSON.stringify({
+
 username:user,
+
 password:pass
+
 })
+
 }
 
 );
+
+
 
 const result=await res.json();
 
+
+
 if(result.success){
 
+
 localStorage.setItem(
+
 "adminToken",
+
 result.token
+
 );
+
 
 window.location.replace(
+
 "admin.html"
+
 );
 
+
 }
+
 else{
 
+
 message.innerHTML=
+
 result.message || "Login failed";
 
-}
 
 }
+
+
+}
+
 
 catch(error){
 
+
 message.innerHTML=
+
 "Unable to connect to server";
 
+
 }
+
+
 
 btn.disabled=false;
+
 btn.innerHTML="LOGIN";
 
+
 }
+
+
 
 document.addEventListener("keypress",(e)=>{
 
+
 if(e.key==="Enter"){
+
 login();
+
 }
+
 
 });
 
+
 </script>
+
 
 </body>
 

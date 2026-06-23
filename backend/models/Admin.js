@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
 
 
-
 const AdminSchema = new mongoose.Schema({
 
 
-
 username:{
-
 
 type:String,
 
@@ -17,15 +14,11 @@ unique:true,
 
 trim:true
 
-
 },
 
 
 
-
-
 email:{
-
 
 type:String,
 
@@ -37,48 +30,68 @@ lowercase:true,
 
 trim:true
 
-
 },
-
-
 
 
 
 password:{
 
-
 type:String,
 
 required:true
 
+},
+
+
+
+role:{
+
+type:String,
+
+default:"admin"
+
+},
+
+
+
+approved:{
+
+type:Boolean,
+
+default:false
 
 },
 
 
 
 
+// PASSWORD RESET
 
-resetToken:{
-
+otp:{
 
 type:String,
 
 default:null
 
-
 },
 
 
 
-
-
-resetTokenExpiry:{
-
+otpExpiry:{
 
 type:Date,
 
 default:null
 
+},
+
+
+
+otpVerified:{
+
+type:Boolean,
+
+default:false
 
 },
 
@@ -88,11 +101,9 @@ default:null
 
 createdAt:{
 
-
 type:Date,
 
 default:Date.now
-
 
 }
 

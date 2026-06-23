@@ -11,23 +11,36 @@
 <style>
 
 :root{
---black:#0B0F14;
---dark:#171B24;
+
+--blue:#0A3D91;
+--navy:#061B3A;
+--white:#FFFFFF;
 --yellow:#FFD400;
+--red:#E63946;
 --gray:#6B7280;
+
 }
 
+
 *{
+
 margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
+
 }
 
+
 body{
-background:white;
-color:var(--black);
+
+background:var(--white);
+
+color:var(--navy);
+
 }
+
+
 
 /* NAVBAR */
 
@@ -37,11 +50,11 @@ position:fixed;
 top:0;
 width:100%;
 
-background:rgba(255,255,255,.95);
+background:rgba(10,61,145,.95);
 
 backdrop-filter:blur(15px);
 
-border-bottom:1px solid #eee;
+border-bottom:1px solid rgba(255,255,255,.2);
 
 z-index:1000;
 
@@ -64,6 +77,8 @@ justify-content:space-between;
 align-items:center;
 
 }
+
+
 
 
 
@@ -106,6 +121,8 @@ font-weight:900;
 
 line-height:1;
 
+color:var(--white);
+
 }
 
 
@@ -143,7 +160,7 @@ gap:22px;
 
 text-decoration:none;
 
-color:#111;
+color:var(--white);
 
 font-weight:bold;
 
@@ -155,7 +172,7 @@ font-size:14px;
 
 .nav a:hover{
 
-color:#E63946;
+color:var(--yellow);
 
 }
 
@@ -166,9 +183,21 @@ color:#E63946;
 
 background:var(--yellow);
 
+color:var(--navy)!important;
+
 padding:10px 18px;
 
 border-radius:30px;
+
+}
+
+
+
+.admin-link:hover{
+
+background:var(--white);
+
+color:var(--blue)!important;
 
 }
 
@@ -183,192 +212,408 @@ font-size:28px;
 
 cursor:pointer;
 
+color:white;
+
 }
+
+
 
 /* HERO */
 
+
 .hero{
+
 padding:150px 20px 90px;
+
 text-align:center;
+
 background:
+
 radial-gradient(circle at top right,
+
 rgba(255,212,0,.18),
-transparent 35%);
+
+transparent 35%),
+
+var(--blue);
+
+color:white;
+
 }
+
+
 
 .hero h1{
+
 font-size:3.5rem;
+
 }
+
+
 
 .hero span{
+
 color:var(--yellow);
+
 }
 
+
+
 .hero p{
+
 max-width:700px;
+
 margin:20px auto;
-color:var(--gray);
+
+color:white;
+
 font-size:18px;
+
 line-height:1.7;
+
+opacity:.9;
+
 }
+
+
 
 /* GENERAL */
 
+
 section{
+
 max-width:1200px;
+
 margin:auto;
+
 padding:70px 20px;
+
 }
+
+
 
 .title{
+
 text-align:center;
+
 margin-bottom:40px;
+
 }
 
+
+
 .title span{
-color:var(--yellow);
+
+color:var(--blue);
+
 }
+
+
 
 /* SERVICES */
 
+
 .services{
+
 display:grid;
+
 grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
 gap:25px;
+
 }
+
+
 
 .card{
-background:#f5f5f5;
+
+background:#f5f8ff;
+
 padding:30px;
+
 border-radius:25px;
+
 transition:.3s;
+
+border:1px solid rgba(10,61,145,.08);
+
 }
+
+
 
 .card:hover{
+
 transform:translateY(-8px);
+
+box-shadow:0 15px 35px rgba(10,61,145,.15);
+
+border-color:var(--yellow);
+
 }
+
+
 
 .icon{
+
 font-size:40px;
+
 margin-bottom:15px;
+
 }
+
+
 
 .card h2{
+
 margin-bottom:15px;
+
+color:var(--navy);
+
 }
 
+
+
 .card p{
+
 color:#555;
+
 line-height:1.7;
+
 }
+
+
 
 /* WHY US */
 
+
 .features{
+
 display:grid;
+
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
 gap:25px;
+
 }
+
+
 
 .feature{
-background:#f5f5f5;
+
+background:#f5f8ff;
+
 padding:30px;
+
 border-radius:20px;
+
 }
 
+
+
 .feature h3{
+
 margin-bottom:10px;
+
+color:var(--blue);
+
 }
+
+
 
 /* PROCESS */
 
+
 .process{
+
 display:grid;
+
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
 gap:25px;
+
 }
+
+
 
 .step{
-background:#f5f5f5;
+
+background:#f5f8ff;
+
 padding:30px;
+
 border-radius:20px;
+
 text-align:center;
+
 }
 
+
+
 .step-number{
+
 width:60px;
+
 height:60px;
+
 background:var(--yellow);
+
+color:var(--navy);
+
 border-radius:50%;
+
 display:flex;
+
 align-items:center;
+
 justify-content:center;
+
 margin:auto auto 15px;
+
 font-weight:bold;
+
 font-size:22px;
+
 }
+
+
 
 /* CTA */
 
+
 .cta{
-background:var(--dark);
+
+background:var(--navy);
+
 color:white;
+
 border-radius:25px;
+
 text-align:center;
+
 padding:50px 20px;
+
 }
+
+
 
 .cta h2{
+
 margin-bottom:15px;
+
 }
 
+
+
 .btn{
+
 display:inline-block;
+
 margin-top:20px;
+
 padding:15px 30px;
+
 background:var(--yellow);
-color:black;
+
+color:var(--navy);
+
 text-decoration:none;
+
 border-radius:30px;
+
 font-weight:bold;
+
 }
+
+
+
+.btn:hover{
+
+background:var(--red);
+
+color:white;
+
+}
+
+
 
 /* FOOTER */
 
+
 footer{
-background:var(--dark);
+
+background:var(--navy);
+
 color:white;
+
 padding:40px;
+
 text-align:center;
+
 }
+
+
 
 /* MOBILE */
 
+
 @media(max-width:768px){
 
+
 .nav{
+
 position:fixed;
+
 right:-100%;
+
 top:70px;
+
 width:250px;
+
 height:100vh;
-background:white;
+
+background:var(--blue);
+
 flex-direction:column;
+
 padding:30px;
+
 transition:.4s;
+
 }
+
+
+
+.nav a{
+
+color:white;
+
+}
+
+
 
 .nav.show{
+
 right:0;
+
 }
+
+
 
 .menu{
+
 display:block;
+
 }
 
+
+
 .hero h1{
+
 font-size:2.5rem;
+
 }
+
+
 
 }
 
@@ -377,6 +622,7 @@ font-size:2.5rem;
 </head>
 
 <body>
+
 
 <header>
 
@@ -402,6 +648,7 @@ CREATIVE SOLUTIONS
 
 
 </div>
+
 
 
 
@@ -472,154 +719,389 @@ Contact
 </header>
 
 
+
+
+
 <section class="hero">
 
 <h1>
-Our <span>Services</span>
+
+Our 
+
+<span>
+
+Services
+
+</span>
+
 </h1>
 
+
 <p>
+
 From branding and graphic design to printing solutions, we help businesses communicate professionally and stand out in competitive markets.
+
 </p>
 
+
 </section>
+
+
+
+
 
 <section>
 
 <div class="title">
-<h2>What We <span>Offer</span></h2>
+
+<h2>
+
+What We 
+
+<span>
+
+Offer
+
+</span>
+
+</h2>
+
 </div>
+
+
+
 
 <div class="services">
 
+
 <div class="card">
+
 <div class="icon">🎨</div>
+
 <h2>Logo Design</h2>
-<p>Professional and memorable logos tailored to your brand identity.</p>
+
+<p>
+Professional and memorable logos tailored to your brand identity.
+</p>
+
 </div>
 
+
+
+
 <div class="card">
+
 <div class="icon">📱</div>
+
 <h2>Graphic Design</h2>
-<p>Flyers, posters, social media graphics and promotional materials.</p>
+
+<p>
+Flyers, posters, social media graphics and promotional materials.
+</p>
+
 </div>
 
+
+
+
 <div class="card">
+
 <div class="icon">🏢</div>
+
 <h2>Brand Identity</h2>
-<p>Complete branding systems including colors, typography and brand assets.</p>
+
+<p>
+Complete branding systems including colors, typography and brand assets.
+</p>
+
 </div>
 
+
+
+
 <div class="card">
+
 <div class="icon">👕</div>
+
 <h2>DTF Printing</h2>
-<p>Custom apparel branding and quality garment printing.</p>
+
+<p>
+Custom apparel branding and quality garment printing.
+</p>
+
 </div>
 
+
+
+
 <div class="card">
+
 <div class="icon">🖨️</div>
+
 <h2>Large Format Printing</h2>
-<p>Banners, signages, roll-up displays and event materials.</p>
+
+<p>
+Banners, signages, roll-up displays and event materials.
+</p>
+
 </div>
 
+
+
+
 <div class="card">
+
 <div class="icon">💼</div>
+
 <h2>Business Solutions</h2>
-<p>Creative solutions that help businesses communicate effectively.</p>
+
+<p>
+Creative solutions that help businesses communicate effectively.
+</p>
+
 </div>
+
 
 </div>
 
 </section>
 
+
+
+
+
 <section>
 
+
 <div class="title">
-<h2>Why Choose <span>Us</span></h2>
+
+<h2>
+
+Why Choose 
+
+<span>
+
+Us
+
+</span>
+
+</h2>
+
 </div>
+
+
+
 
 <div class="features">
 
-<div class="feature">
-<h3>Quality Delivery</h3>
-<p>Every project is executed with attention to detail and professionalism.</p>
-</div>
 
 <div class="feature">
-<h3>Creative Excellence</h3>
-<p>Modern and innovative designs tailored to your audience.</p>
+
+<h3>
+Quality Delivery
+</h3>
+
+<p>
+Every project is executed with attention to detail and professionalism.
+</p>
+
 </div>
 
+
+
+
 <div class="feature">
-<h3>Reliable Support</h3>
-<p>We work closely with clients from concept to completion.</p>
+
+<h3>
+Creative Excellence
+</h3>
+
+<p>
+Modern and innovative designs tailored to your audience.
+</p>
+
 </div>
+
+
+
+
+<div class="feature">
+
+<h3>
+Reliable Support
+</h3>
+
+<p>
+We work closely with clients from concept to completion.
+</p>
+
+</div>
+
 
 </div>
 
 </section>
 
+
+
+
+
 <section>
 
+
 <div class="title">
-<h2>Our <span>Process</span></h2>
+
+<h2>
+
+Our 
+
+<span>
+
+Process
+
+</span>
+
+</h2>
+
 </div>
+
+
+
 
 <div class="process">
 
-<div class="step">
-<div class="step-number">1</div>
-<h3>Consultation</h3>
-<p>We understand your goals and project requirements.</p>
-</div>
 
 <div class="step">
-<div class="step-number">2</div>
-<h3>Design</h3>
-<p>Creative concepts are developed and refined.</p>
+
+<div class="step-number">
+1
 </div>
+
+<h3>
+Consultation
+</h3>
+
+<p>
+We understand your goals and project requirements.
+</p>
+
+</div>
+
+
+
+
 
 <div class="step">
-<div class="step-number">3</div>
-<h3>Delivery</h3>
-<p>Final files are delivered professionally and on time.</p>
+
+<div class="step-number">
+2
 </div>
 
+<h3>
+Design
+</h3>
+
+<p>
+Creative concepts are developed and refined.
+</p>
+
 </div>
+
+
+
+
+
+<div class="step">
+
+<div class="step-number">
+3
+</div>
+
+<h3>
+Delivery
+</h3>
+
+<p>
+Final files are delivered professionally and on time.
+</p>
+
+</div>
+
+
+</div>
+
 
 </section>
+
+
+
+
 
 <section>
 
+
 <div class="cta">
 
+
 <h2>
+
 Ready To Build Your Brand?
+
 </h2>
 
+
 <p>
+
 Let's create something amazing together.
+
 </p>
 
+
+
 <a href="contact.html" class="btn">
+
 Contact Us
+
 </a>
+
+
 
 </div>
 
+
 </section>
 
+
+
+
+
 <footer>
+
 © 2026 GODNECHEZ CREATIVE SOLUTIONS
+
 </footer>
+
+
+
+
 
 <script>
 
+
 function toggleMenu(){
-document.getElementById("nav").classList.toggle("show");
+
+document
+
+.getElementById("nav")
+
+.classList.toggle("show");
+
 }
+
 
 </script>
 
+
 </body>
+
 </html>
