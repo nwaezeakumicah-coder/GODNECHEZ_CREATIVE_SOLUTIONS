@@ -735,12 +735,6 @@ message:err.message
 
 
 
-
-
-
-
-
-
 /*
 =====================
 FORGOT PASSWORD OTP
@@ -749,22 +743,22 @@ FORGOT PASSWORD OTP
 
 
 app.post(
-
 "/api/admin/forgot-password",
-
 async(req,res)=>{
 
 
 try{
 
 
+const {email} = req.body;
+
+
+
 const admin = await Admin.findOne({
 
-email:req.body.email
+email: email
 
 });
-
-
 
 
 
@@ -783,12 +777,11 @@ message:"Admin email not found"
 
 
 
+// CREATE OTP
 
 const otp = Math.floor(
 
-100000 +
-
-Math.random()*900000
+100000 + Math.random() * 900000
 
 ).toString();
 
@@ -796,11 +789,11 @@ Math.random()*900000
 
 
 
+// SAVE OTP
+
 admin.otp = otp;
 
-
-admin.otpExpiry = Date.now() + 600000;
-
+admin.otpExpiry = Date.now() + 10 * 60 * 1000;
 
 
 
@@ -810,35 +803,53 @@ await admin.save();
 
 
 
-
+// SEND EMAIL
 
 await transporter.sendMail({
 
-from:process.env.EMAIL_USER,
 
-to:admin.email,
+from: process.env.EMAIL_USER,
+
+
+to: admin.email,
+
 
 subject:"GODNECHEZ Admin Password Reset OTP",
 
 
+
 html:`
 
-<div style="font-family:Arial">
+<div style="font-family:Arial,sans-serif">
+
 
 <h2>GODNECHEZ ADMIN</h2>
 
+
 <p>Your password reset OTP is:</p>
+
 
 <h1>${otp}</h1>
 
+
 <p>This OTP expires in 10 minutes.</p>
+
 
 </div>
 
 `
 
+
 });
 
+
+
+
+console.log(
+"OTP SENT:",
+admin.email,
+otp
+);
 
 
 
@@ -853,10 +864,16 @@ message:"OTP sent successfully"
 
 
 
-
 }
 
+
 catch(err){
+
+
+console.log(
+"FORGOT PASSWORD ERROR:",
+err.message
+);
 
 
 res.status(500).json({
@@ -873,9 +890,6 @@ message:err.message
 }
 
 );
-
-
-
 
 
 
@@ -900,20 +914,27 @@ async(req,res)=>{
 try{
 
 
+const {email, otp} = req.body;
+
+
+
 const admin = await Admin.findOne({
 
-email:req.body.email,
 
-otp:req.body.otp,
+email: email,
+
+
+otp: otp,
+
 
 otpExpiry:{
 
-$gt:Date.now()
+$gt: Date.now()
 
 }
 
-});
 
+});
 
 
 
@@ -934,13 +955,11 @@ message:"Invalid or expired OTP"
 
 
 
-
-
 res.json({
 
 success:true,
 
-message:"OTP verified"
+message:"OTP verified successfully"
 
 });
 
@@ -949,7 +968,14 @@ message:"OTP verified"
 }
 
 
+
 catch(err){
+
+
+console.log(
+"VERIFY OTP ERROR:",
+err.message
+);
 
 
 res.status(500).json({
@@ -966,11 +992,6 @@ message:err.message
 }
 
 );
-
-
-
-
-
 
 
 
