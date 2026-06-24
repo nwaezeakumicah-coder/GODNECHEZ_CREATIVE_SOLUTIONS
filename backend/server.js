@@ -122,7 +122,7 @@ EMAIL SYSTEM
 =====================
 */
 
-const nodemailer = require("nodemailer");
+
 
 
 // CREATE EMAIL TRANSPORTER
