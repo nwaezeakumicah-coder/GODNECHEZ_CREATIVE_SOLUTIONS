@@ -8,133 +8,215 @@
 
 <title>Admin Login | GODNECHEZ</title>
 
+
 <style>
 
 :root{
---black:#0B0F14;
---yellow:#0f4cb4;
---dark:#171B24;
+
+--blue:#0f4cb4;
+--dark:#0B0F14;
+--yellow:#FFD400;
+
 }
 
+
 *{
+
 margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
+
 }
+
 
 body{
+
 min-height:100vh;
+
 display:flex;
-align-items:center;
+
 justify-content:center;
+
+align-items:center;
+
 padding:20px;
+
 background:linear-gradient(
 135deg,
-#0B0F14,
-#171B24
+#061B3A,
+#0B0F14
 );
+
 }
+
+
 
 .login-box{
+
 background:white;
+
 width:100%;
+
 max-width:380px;
+
 padding:35px;
+
 border-radius:20px;
+
 box-shadow:0 20px 50px rgba(0,0,0,.3);
+
 }
+
+
 
 .logo{
+
 text-align:center;
+
 font-size:28px;
+
 font-weight:900;
+
 margin-bottom:10px;
+
 }
+
+
 
 .logo span{
-color:var(--yellow);
+
+color:var(--blue);
+
 }
+
+
 
 .subtitle{
+
 text-align:center;
+
 color:#666;
+
 margin-bottom:25px;
-font-size:14px;
+
 }
+
+
 
 input{
+
 width:100%;
+
 padding:14px;
+
 margin:12px 0;
-border-radius:10px;
+
 border:1px solid #ddd;
-outline:none;
+
+border-radius:10px;
+
 font-size:15px;
+
 }
+
+
 
 input:focus{
-border-color:var(--yellow);
+
+outline:2px solid var(--blue);
+
 }
+
+
 
 button{
+
 width:100%;
+
 padding:15px;
+
 border:none;
+
 border-radius:10px;
+
 background:var(--yellow);
+
 font-weight:bold;
+
 cursor:pointer;
-font-size:15px;
-transition:.3s;
+
 }
 
-button:hover{
-transform:translateY(-2px);
+
+
+button:disabled{
+
+opacity:.6;
+
+cursor:not-allowed;
+
 }
+
+
 
 .forgot{
+
 display:block;
+
 text-align:center;
+
 margin-top:15px;
+
 text-decoration:none;
+
 color:#555;
-font-size:14px;
+
 }
 
-.forgot:hover{
-color:black;
-}
+
 
 #message{
+
 margin-top:15px;
+
 text-align:center;
+
 font-weight:bold;
-color:#E63946;
+
 min-height:20px;
+
 }
+
+
 
 .back{
+
 display:block;
+
 text-align:center;
+
 margin-top:20px;
+
 text-decoration:none;
+
 color:#555;
-font-size:14px;
+
 }
 
-.back:hover{
-color:black;
-}
 
 </style>
 
+
 </head>
+
 
 <body>
 
 
+
 <div class="login-box">
+
 
 
 <div class="logo">
@@ -144,11 +226,14 @@ GODNECHEZ <span>ADMIN</span>
 </div>
 
 
+
 <p class="subtitle">
 
 Secure administrator access
 
 </p>
+
+
 
 
 <input
@@ -157,9 +242,11 @@ id="username"
 
 placeholder="Username"
 
-autocomplete="username"
+
 
 >
+
+
 
 
 <input
@@ -170,9 +257,9 @@ type="password"
 
 placeholder="Password"
 
-autocomplete="current-password"
-
 >
+
+
 
 
 <button id="loginBtn" onclick="login()">
@@ -182,6 +269,8 @@ LOGIN
 </button>
 
 
+
+
 <a class="forgot" href="forgot-password.html">
 
 Forgot Password?
@@ -189,7 +278,10 @@ Forgot Password?
 </a>
 
 
+
+
 <p id="message"></p>
+
 
 
 <a class="back" href="index.html">
@@ -199,20 +291,30 @@ Forgot Password?
 </a>
 
 
+
 </div>
+
+
+
+
+
+
 
 <script>
 
 
-const API="https://godnechez-creative-solutions.onrender.com";
+const API =
+"https://godnechez-creative-solutions.onrender.com";
 
 
-const token=localStorage.getItem("adminToken");
 
 
-if(token){
 
-window.location.replace("admin.html");
+if(localStorage.getItem("adminToken")){
+
+
+window.location.href="admin.html";
+
 
 }
 
@@ -223,39 +325,45 @@ window.location.replace("admin.html");
 async function login(){
 
 
-const user=document.getElementById("username").value.trim();
+
+const username =
+document.getElementById("username").value.trim();
 
 
-const pass=document.getElementById("password").value.trim();
+
+const password =
+document.getElementById("password").value.trim();
 
 
 
-if(!user || !pass){
+const message =
+document.getElementById("message");
 
 
-document.getElementById("message").innerHTML=
 
-"Please enter username and password";
+const btn =
+document.getElementById("loginBtn");
+
+
+
+
+if(!username || !password){
+
+
+message.innerHTML="Enter username and password";
 
 
 return;
+
 
 }
 
 
 
 
-
-const btn=document.getElementById("loginBtn");
-
-
 btn.disabled=true;
 
-
 btn.innerHTML="Logging in...";
-
-
-document.getElementById("message").innerHTML="";
 
 
 
@@ -265,7 +373,7 @@ try{
 
 
 
-const res=await fetch(
+const res = await fetch(
 
 API+"/api/admin/login",
 
@@ -287,10 +395,10 @@ headers:{
 body:JSON.stringify({
 
 
-username:user,
+username,
 
 
-password:pass
+password
 
 
 })
@@ -304,32 +412,27 @@ password:pass
 
 
 
-const result=await res.json();
+
+const data = await res.json();
 
 
 
 
 
-if(result.success){
-
+if(data.success){
 
 
 localStorage.setItem(
 
 "adminToken",
 
-result.token
+data.token
 
 );
 
 
 
-window.location.replace(
-
-"admin.html"
-
-);
-
+window.location.href="admin.html";
 
 
 }
@@ -337,36 +440,34 @@ window.location.replace(
 else{
 
 
-document.getElementById("message").innerHTML=
+message.innerHTML=
 
-result.message || "Login failed";
-
-
-}
-
+data.message || "Login failed";
 
 
 }
 
 
 
-catch(error){
-
-
-
-document.getElementById("message").innerHTML=
-
-"Unable to connect to server";
-
 
 }
 
+catch(err){
 
+
+console.log(err);
+
+
+message.innerHTML=
+
+"Server connection error";
+
+
+}
 
 
 
 btn.disabled=false;
-
 
 btn.innerHTML="LOGIN";
 
@@ -378,7 +479,11 @@ btn.innerHTML="LOGIN";
 
 
 
-document.addEventListener("keypress",(e)=>{
+document.addEventListener(
+
+"keypress",
+
+(e)=>{
 
 
 if(e.key==="Enter"){
@@ -390,11 +495,13 @@ login();
 }
 
 
-});
+}
 
+);
 
 
 </script>
+
 
 
 </body>
