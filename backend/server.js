@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -9,9 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
-const {CloudinaryStorage} = require("multer-storage-cloudinary");
-
-
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const Design = require("./models/Design");
 const Team = require("./models/Team");
@@ -21,69 +18,46 @@ const Testimonial = require("./models/Testimonial");
 const Message = require("./models/Message");
 
 
-
 const app = express();
 
 
-
 const PORT = process.env.PORT || 5000;
-
 
 const SECRET = process.env.JWT_SECRET || "godnechez_secret";
 
 
 
-
-
 /*
 =====================
-CORS
+MIDDLEWARE
 =====================
 */
 
 
 app.use(cors({
 
-origin:[
+    origin: [
+        "https://nwaezeakumicah-coder.github.io",
+        "http://localhost:5500"
+    ],
 
-"https://nwaezeakumicah-coder.github.io",
+    methods: [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+    ],
 
-"http://localhost:5500"
-
-],
-
-methods:[
-
-"GET",
-
-"POST",
-
-"PUT",
-
-"DELETE"
-
-],
-
-credentials:true
+    credentials:true
 
 }));
-
-
-
-
-
 
 
 app.use(express.json());
 
-
 app.use(express.urlencoded({
-
-extended:true
-
+    extended:true
 }));
-
-
 
 
 
@@ -98,60 +72,43 @@ CLOUDINARY
 
 cloudinary.config({
 
-cloud_name:process.env.CLOUD_NAME,
+    cloud_name: process.env.CLOUD_NAME,
 
-api_key:process.env.CLOUD_API_KEY,
+    api_key: process.env.CLOUD_API_KEY,
 
-api_secret:process.env.CLOUD_API_SECRET
+    api_secret: process.env.CLOUD_API_SECRET
 
 });
-
-
-
 
 
 
 const storage = new CloudinaryStorage({
 
-cloudinary:cloudinary,
+    cloudinary,
 
+    params: {
 
-params:{
+        folder:"godnechez",
 
+        resource_type:"image"
 
-folder:"godnechez",
-
-
-resource_type:"image"
-
-
-}
-
+    }
 
 });
-
-
-
-
 
 
 
 const upload = multer({
 
-storage:storage,
+    storage,
 
+    limits:{
 
-limits:{
+        fileSize:10 * 1024 * 1024
 
-
-fileSize:10 * 1024 * 1024
-
-
-}
-
+    }
 
 });
-
 
 
 
@@ -168,52 +125,41 @@ EMAIL SYSTEM
 
 const transporter = nodemailer.createTransport({
 
-service:"gmail",
+    service:"gmail",
 
+    auth:{
 
-auth:{
+        user:process.env.EMAIL_USER,
 
+        pass:process.env.EMAIL_PASS
 
-user:process.env.EMAIL_USER,
-
-
-pass:process.env.EMAIL_PASS
-
-
-}
-
+    }
 
 });
-
-
 
 
 
 transporter.verify((error)=>{
 
+    if(error){
 
-if(error){
+        console.log(
+            "EMAIL ERROR:",
+            error.message
+        );
 
-console.log(
-"EMAIL ERROR:",
-error.message
-);
+    }else{
 
+        console.log(
+            "EMAIL SERVER READY"
+        );
 
-}
-
-else{
-
-
-console.log(
-"EMAIL SERVER READY"
-);
-
-
-}
-
+    }
 
 });
+
+
+
 
 
 
@@ -226,34 +172,32 @@ DATABASE
 */
 
 
-mongoose.connect(
-
-process.env.MONGO_URI
-
-)
+mongoose.connect(process.env.MONGO_URI)
 
 .then(()=>{
 
-console.log(
-"MongoDB Connected"
-);
-
+    console.log(
+        "MongoDB Connected"
+    );
 
 })
 
-.catch(err=>{
+.catch((error)=>{
 
-
-console.log(
-
-"MongoDB Error:",
-
-err.message
-
-);
-
+    console.log(
+        "MongoDB Error:",
+        error.message
+    );
 
 });
+
+
+
+
+
+
+
+
 
 /*
 =====================
@@ -265,82 +209,73 @@ AUTH MIDDLEWARE
 function protect(req,res,next){
 
 
-const header = req.headers.authorization;
+    const header = req.headers.authorization;
 
 
 
-if(!header){
+    if(!header){
 
+        return res.status(401).json({
 
-return res.status(401).json({
+            message:"No token provided"
 
-message:"No token provided"
+        });
 
-});
-
-
-}
-
-
-
-const token = header.split(" ")[1];
-
-
-
-if(!token){
-
-
-return res.status(401).json({
-
-message:"Invalid token"
-
-});
-
-
-}
+    }
 
 
 
 
-try{
-
-
-const decoded = jwt.verify(
-
-token,
-
-SECRET
-
-);
+    const token = header.split(" ")[1];
 
 
 
-req.admin = decoded;
+    if(!token){
+
+        return res.status(401).json({
+
+            message:"Invalid token"
+
+        });
+
+    }
 
 
 
-next();
 
 
-
-}
-
-
-catch(error){
+    try{
 
 
-return res.status(401).json({
+        const decoded = jwt.verify(
+            token,
+            SECRET
+        );
 
-message:"Token expired or invalid"
 
-});
+        req.admin = decoded;
+
+
+        next();
+
+
+    }
+
+    catch(error){
+
+
+        return res.status(401).json({
+
+            message:"Token expired or invalid"
+
+        });
+
+
+    }
 
 
 }
 
-
-
-}
 
 
 
@@ -359,21 +294,16 @@ HOME
 app.get("/",(req,res)=>{
 
 
-res.json({
+    res.json({
 
-message:"GODNECHEZ Backend Running"
+        success:true,
+
+        message:"GODNECHEZ Backend Running"
+
+    });
+
 
 });
-
-
-});
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -383,7 +313,6 @@ ADMIN LOGIN
 
 
 app.post(
-
 "/api/admin/login",
 
 async(req,res)=>{
@@ -400,8 +329,6 @@ username:req.body.username
 
 
 
-
-
 if(!admin){
 
 
@@ -413,8 +340,6 @@ message:"Invalid credentials"
 
 
 }
-
-
 
 
 
@@ -435,7 +360,6 @@ message:"Account waiting for approval"
 
 
 
-
 const match = await bcrypt.compare(
 
 req.body.password,
@@ -443,7 +367,6 @@ req.body.password,
 admin.password
 
 );
-
 
 
 
@@ -459,9 +382,6 @@ message:"Invalid credentials"
 
 
 }
-
-
-
 
 
 
@@ -492,7 +412,6 @@ expiresIn:"2h"
 
 
 
-
 res.json({
 
 success:true,
@@ -505,8 +424,6 @@ token
 
 }
 
-
-
 catch(err){
 
 
@@ -518,7 +435,6 @@ message:err.message
 
 
 }
-
 
 
 }
@@ -565,6 +481,7 @@ message:"Maximum admin limit reached"
 
 
 }
+
 
 
 
@@ -647,7 +564,6 @@ approved:false
 
 
 
-
 await admin.save();
 
 
@@ -669,7 +585,6 @@ message:"Registration successful. Await approval"
 }
 
 
-
 catch(err){
 
 
@@ -683,10 +598,17 @@ message:err.message
 }
 
 
-
 }
 
 );
+
+
+
+
+
+
+
+
 
 /*
 =====================
@@ -715,7 +637,6 @@ email:req.body.email
 
 
 
-
 if(!admin){
 
 
@@ -727,8 +648,6 @@ message:"Admin email not found"
 
 
 }
-
-
 
 
 
@@ -746,14 +665,10 @@ Math.random()*900000
 
 
 
-
-
 admin.otp = otp;
 
 
 admin.otpExpiry = Date.now() + 600000;
-
-
 
 
 
@@ -766,93 +681,32 @@ await admin.save();
 
 
 
-
-try{
-
-
-
 await transporter.sendMail({
 
 from:process.env.EMAIL_USER,
 
-
 to:admin.email,
-
 
 subject:"GODNECHEZ Admin Password Reset OTP",
 
 
-
-html:
-
-
-
-
+html:`
 
 <div style="font-family:Arial">
 
-
 <h2>GODNECHEZ ADMIN</h2>
-
 
 <p>Your password reset OTP is:</p>
 
-
 <h1>${otp}</h1>
-
 
 <p>This OTP expires in 10 minutes.</p>
 
-
-
 </div>
 
-
-
-
-
+`
 
 });
-
-
-
-console.log(
-
-"OTP EMAIL SENT TO:",
-
-admin.email
-
-);
-
-
-
-}
-
-catch(emailError){
-
-
-
-console.log(
-
-"EMAIL ERROR:",
-
-emailError.message
-
-);
-
-
-
-return res.status(500).json({
-
-message:"OTP email could not be sent"
-
-});
-
-
-
-}
-
-
 
 
 
@@ -869,16 +723,9 @@ message:"OTP sent successfully"
 
 
 
-
 }
 
-
 catch(err){
-
-
-
-console.log(err);
-
 
 
 res.status(500).json({
@@ -888,7 +735,6 @@ message:err.message
 });
 
 
-
 }
 
 
@@ -896,6 +742,7 @@ message:err.message
 }
 
 );
+
 
 
 
@@ -952,7 +799,6 @@ message:"Invalid or expired OTP"
 
 
 }
-
 
 
 
@@ -1025,6 +871,7 @@ email:req.body.email
 
 
 
+
 if(!admin){
 
 
@@ -1042,6 +889,7 @@ message:"Admin not found"
 
 
 
+
 admin.password = await bcrypt.hash(
 
 req.body.password,
@@ -1049,8 +897,6 @@ req.body.password,
 10
 
 );
-
-
 
 
 
@@ -1084,6 +930,7 @@ message:"Password changed successfully"
 }
 
 
+
 catch(err){
 
 
@@ -1101,6 +948,7 @@ message:err.message
 }
 
 );
+
 /*
 =====================
 STATS
@@ -1228,11 +1076,7 @@ category:req.body.category,
 
 description:req.body.description,
 
-
-// CLOUDINARY URL
-
 image:req.file.path
-
 
 });
 
@@ -1241,9 +1085,7 @@ image:req.file.path
 
 
 
-
 await design.save();
-
 
 
 
@@ -1261,7 +1103,6 @@ data:design
 
 
 }
-
 
 
 catch(err){
@@ -1284,9 +1125,6 @@ message:err.message
 }
 
 );
-
-
-
 
 
 
@@ -1335,7 +1173,6 @@ data:designs
 }
 
 
-
 catch(err){
 
 
@@ -1353,9 +1190,6 @@ message:err.message
 }
 
 );
-
-
-
 
 
 
@@ -1404,7 +1238,6 @@ message:"Design deleted"
 }
 
 
-
 catch(err){
 
 
@@ -1422,6 +1255,10 @@ message:err.message
 }
 
 );
+
+
+
+
 
 
 
@@ -1460,7 +1297,6 @@ position:req.body.position,
 category:req.body.category || "staff",
 
 bio:req.body.bio,
-
 
 image:req.file ? req.file.path : ""
 
@@ -1517,9 +1353,6 @@ message:err.message
 
 
 
-
-
-
 // GET TEAM
 
 
@@ -1559,7 +1392,6 @@ data:team
 }
 
 
-
 catch(err){
 
 
@@ -1577,8 +1409,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -1610,18 +1440,14 @@ const update = {
 
 name:req.body.name,
 
-
 position:req.body.position,
 
-
 category:req.body.category,
-
 
 bio:req.body.bio
 
 
 };
-
 
 
 
@@ -1635,8 +1461,6 @@ update.image=req.file.path;
 
 
 }
-
-
 
 
 
@@ -1662,7 +1486,6 @@ new:true
 
 
 
-
 res.json({
 
 success:true,
@@ -1674,7 +1497,6 @@ data:member
 
 
 }
-
 
 
 catch(err){
@@ -1694,8 +1516,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -1731,7 +1551,6 @@ req.params.id
 
 
 
-
 res.json({
 
 success:true
@@ -1741,7 +1560,6 @@ success:true
 
 
 }
-
 
 
 catch(err){
@@ -1761,14 +1579,6 @@ message:err.message
 }
 
 );
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -1796,9 +1606,7 @@ const faq = new FAQ({
 
 question:req.body.question,
 
-
 answer:req.body.answer
-
 
 });
 
@@ -1808,7 +1616,6 @@ answer:req.body.answer
 
 
 await faq.save();
-
 
 
 
@@ -1845,8 +1652,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -1895,7 +1700,6 @@ data:faqs
 }
 
 
-
 catch(err){
 
 
@@ -1913,8 +1717,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -1961,7 +1763,6 @@ success:true
 }
 
 
-
 catch(err){
 
 
@@ -1979,6 +1780,14 @@ message:err.message
 }
 
 );
+
+
+
+
+
+
+
+
 
 /*
 =====================
@@ -2035,7 +1844,6 @@ message:"Submitted successfully"
 }
 
 
-
 catch(err){
 
 
@@ -2053,8 +1861,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -2094,7 +1900,6 @@ createdAt:-1
 
 
 
-
 res.json({
 
 success:true,
@@ -2106,7 +1911,6 @@ data:testimonials
 
 
 }
-
 
 
 catch(err){
@@ -2126,8 +1930,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -2165,7 +1967,6 @@ createdAt:-1
 
 
 
-
 res.json({
 
 success:true,
@@ -2177,7 +1978,6 @@ data:testimonials
 
 
 }
-
 
 
 catch(err){
@@ -2197,8 +1997,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -2259,7 +2057,6 @@ data:testimonial
 }
 
 
-
 catch(err){
 
 
@@ -2277,9 +2074,6 @@ message:err.message
 }
 
 );
-
-
-
 
 
 
@@ -2326,7 +2120,6 @@ success:true
 }
 
 
-
 catch(err){
 
 
@@ -2344,18 +2137,6 @@ message:err.message
 }
 
 );
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -2441,8 +2222,6 @@ message:err.message
 
 
 
-
-
 // GET MESSAGES
 
 
@@ -2471,7 +2250,6 @@ createdAt:-1
 
 
 
-
 res.json({
 
 success:true,
@@ -2483,7 +2261,6 @@ data:messages
 
 
 }
-
 
 
 catch(err){
@@ -2503,8 +2280,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -2551,7 +2326,6 @@ success:true
 }
 
 
-
 catch(err){
 
 
@@ -2569,6 +2343,14 @@ message:err.message
 }
 
 );
+
+
+
+
+
+
+
+
 
 /*
 =====================
@@ -2616,7 +2398,6 @@ data:admins
 }
 
 
-
 catch(err){
 
 
@@ -2634,8 +2415,6 @@ message:err.message
 }
 
 );
-
-
 
 
 
@@ -2672,7 +2451,7 @@ approved:true
 
 {
 
-returnDocument: "after"
+returnDocument:"after"
 
 }
 
@@ -2697,7 +2476,6 @@ data:admin
 }
 
 
-
 catch(err){
 
 
@@ -2715,9 +2493,6 @@ message:err.message
 }
 
 );
-
-
-
 
 
 
@@ -2753,7 +2528,6 @@ req.params.id
 
 
 
-
 res.json({
 
 success:true,
@@ -2765,7 +2539,6 @@ message:"Admin removed"
 
 
 }
-
 
 
 catch(err){
@@ -2818,6 +2591,7 @@ err
 
 
 
+
 res.status(500).json({
 
 success:false,
@@ -2833,6 +2607,14 @@ err.message || "Server error"
 }
 
 );
+
+
+
+
+
+
+
+
 
 /*
 =====================
