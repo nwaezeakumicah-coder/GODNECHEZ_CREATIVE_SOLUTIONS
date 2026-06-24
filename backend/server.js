@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -10,6 +11,8 @@ const nodemailer = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
+
+
 const Design = require("./models/Design");
 const Team = require("./models/Team");
 const Admin = require("./models/Admin");
@@ -18,12 +21,18 @@ const Testimonial = require("./models/Testimonial");
 const Message = require("./models/Message");
 
 
+
 const app = express();
 
 
 const PORT = process.env.PORT || 5000;
 
-const SECRET = process.env.JWT_SECRET || "godnechez_secret";
+
+const SECRET =
+process.env.JWT_SECRET || "godnechez_secret";
+
+
+
 
 
 
@@ -36,28 +45,40 @@ MIDDLEWARE
 
 app.use(cors({
 
-    origin: [
-        "https://nwaezeakumicah-coder.github.io",
-        "http://localhost:5500"
-    ],
+origin:[
 
-    methods: [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE"
-    ],
+"https://nwaezeakumicah-coder.github.io",
 
-    credentials:true
+"http://localhost:5500"
+
+],
+
+methods:[
+
+"GET",
+"POST",
+"PUT",
+"DELETE"
+
+],
+
+credentials:true
 
 }));
+
 
 
 app.use(express.json());
 
+
 app.use(express.urlencoded({
-    extended:true
+
+extended:true
+
 }));
+
+
+
 
 
 
@@ -72,43 +93,52 @@ CLOUDINARY
 
 cloudinary.config({
 
-    cloud_name: process.env.CLOUD_NAME,
+cloud_name:
+process.env.CLOUD_NAME,
 
-    api_key: process.env.CLOUD_API_KEY,
+api_key:
+process.env.CLOUD_API_KEY,
 
-    api_secret: process.env.CLOUD_API_SECRET
+api_secret:
+process.env.CLOUD_API_SECRET
+
+});
+
+
+
+
+
+const storage =
+new CloudinaryStorage({
+
+cloudinary,
+
+params:{
+
+folder:"godnechez",
+
+resource_type:"image"
+
+}
 
 });
 
-
-
-const storage = new CloudinaryStorage({
-
-    cloudinary,
-
-    params: {
-
-        folder:"godnechez",
-
-        resource_type:"image"
-
-    }
-
-});
 
 
 
 const upload = multer({
 
-    storage,
+storage,
 
-    limits:{
+limits:{
 
-        fileSize:10 * 1024 * 1024
+fileSize:10 * 1024 * 1024
 
-    }
+}
 
 });
+
+
 
 
 
@@ -123,178 +153,48 @@ EMAIL SYSTEM
 */
 
 
+const transporter =
+nodemailer.createTransport({
 
+service:"gmail",
 
-// CREATE EMAIL TRANSPORTER
+auth:{
 
-const transporter = nodemailer.createTransport({
+user:process.env.EMAIL_USER,
 
-    service: "gmail",
+pass:process.env.EMAIL_PASS
 
-    auth: {
-
-        user: process.env.EMAIL_USER,
-
-        pass: process.env.EMAIL_PASS
-
-    }
+}
 
 });
 
 
-// CHECK EMAIL CONNECTION
+
 
 transporter.verify((error)=>{
 
-    if(error){
 
-        console.log(
-            "EMAIL ERROR:",
-            error.message
-        );
+if(error){
 
-    }else{
+console.log(
+"EMAIL ERROR:",
+error.message
+);
 
-        console.log(
-            "EMAIL SERVER READY"
-        );
 
-    }
+}else{
+
+
+console.log(
+"EMAIL SERVER READY"
+);
+
+
+}
+
+
 
 });
-
-
-
-
-// TEMP OTP STORAGE
-
-let otpStore = {};
-
-
-
-
-// GENERATE OTP FUNCTION
-
-function generateOTP(){
-
-    return Math.floor(
-        100000 + Math.random() * 900000
-    ).toString();
-
-}
-
-
-
-
-// SEND OTP FUNCTION
-
-async function sendOTP(email){
-
-
-    const otp = generateOTP();
-
-
-    otpStore[email] = {
-
-        otp: otp,
-
-        expires:
-        Date.now() + 5 * 60 * 1000
-
-    };
-
-
-
-    await transporter.sendMail({
-
-        from: process.env.EMAIL_USER,
-
-        to: email,
-
-        subject: "Your OTP Code",
-
-        html: `
-
-        <h2>Password Reset OTP</h2>
-
-        <p>Your OTP code is:</p>
-
-        <h1>${otp}</h1>
-
-        <p>This code expires in 5 minutes.</p>
-
-        `
-
-    });
-
-
-
-    console.log(
-        "OTP sent to:",
-        email
-    );
-
-
-}
-
-
-
-
-// VERIFY OTP FUNCTION
-
-function verifyOTP(email, otp){
-
-
-    const record = otpStore[email];
-
-
-    if(!record){
-
-        return false;
-
-    }
-
-
-
-    if(Date.now() > record.expires){
-
-        delete otpStore[email];
-
-        return false;
-
-    }
-
-
-
-    if(record.otp !== otp){
-
-        return false;
-
-    }
-
-
-
-    delete otpStore[email];
-
-
-    return true;
-
-
-}
-
-
-
-
-module.exports = {
-
-    sendOTP,
-
-    verifyOTP
-
-};
-
-
-
 
 /*
 =====================
@@ -303,25 +203,26 @@ DATABASE
 */
 
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(
+process.env.MONGO_URI
+)
 
 .then(()=>{
 
-    console.log(
-        "MongoDB Connected"
-    );
+console.log(
+"MongoDB Connected"
+);
 
 })
 
 .catch((error)=>{
 
-    console.log(
-        "MongoDB Error:",
-        error.message
-    );
+console.log(
+"MongoDB Error:",
+error.message
+);
 
 });
-
 
 
 
@@ -340,69 +241,75 @@ AUTH MIDDLEWARE
 function protect(req,res,next){
 
 
-    const header = req.headers.authorization;
+const header =
+req.headers.authorization;
 
 
 
-    if(!header){
+if(!header){
 
-        return res.status(401).json({
+return res.status(401).json({
 
-            message:"No token provided"
+message:"No token provided"
 
-        });
+});
 
-    }
-
-
-
-
-    const token = header.split(" ")[1];
+}
 
 
 
-    if(!token){
-
-        return res.status(401).json({
-
-            message:"Invalid token"
-
-        });
-
-    }
+const token =
+header.split(" ")[1];
 
 
 
+if(!token){
+
+return res.status(401).json({
+
+message:"Invalid token"
+
+});
+
+}
 
 
-    try{
+
+try{
 
 
-        const decoded = jwt.verify(
-            token,
-            SECRET
-        );
+const decoded =
+jwt.verify(
+
+token,
+
+SECRET
+
+);
 
 
-        req.admin = decoded;
+
+req.admin = decoded;
 
 
-        next();
+next();
 
 
-    }
 
-    catch(error){
+}
 
-
-        return res.status(401).json({
-
-            message:"Token expired or invalid"
-
-        });
+catch(error){
 
 
-    }
+return res.status(401).json({
+
+message:"Token expired or invalid"
+
+});
+
+
+}
+
 
 
 }
@@ -425,16 +332,182 @@ HOME
 app.get("/",(req,res)=>{
 
 
-    res.json({
+res.json({
 
-        success:true,
+success:true,
 
-        message:"GODNECHEZ Backend Running"
+message:"GODNECHEZ Backend Running"
 
-    });
+});
 
 
 });
+
+
+
+
+
+
+
+
+
+/*
+=====================
+ADMIN REGISTER
+=====================
+*/
+
+
+app.post(
+
+"/api/admin/register",
+
+async(req,res)=>{
+
+
+try{
+
+
+const totalAdmins =
+await Admin.countDocuments();
+
+
+
+if(totalAdmins >= 3){
+
+
+return res.status(400).json({
+
+message:"Maximum admin limit reached"
+
+});
+
+
+}
+
+
+
+
+
+
+const exists =
+await Admin.findOne({
+
+$or:[
+
+{
+username:req.body.username
+},
+
+{
+email:req.body.email
+}
+
+]
+
+});
+
+
+
+
+
+
+if(exists){
+
+
+return res.status(400).json({
+
+message:"Admin already exists"
+
+});
+
+
+}
+
+
+
+
+
+
+const hashedPassword =
+await bcrypt.hash(
+
+req.body.password,
+
+10
+
+);
+
+
+
+
+
+
+const admin =
+new Admin({
+
+username:req.body.username,
+
+email:req.body.email,
+
+password:hashedPassword,
+
+role:"admin",
+
+approved:false
+
+
+});
+
+
+
+
+
+
+await admin.save();
+
+
+
+
+
+
+res.json({
+
+success:true,
+
+message:
+"Registration successful. Await approval"
+
+});
+
+
+
+}
+
+catch(error){
+
+
+res.status(500).json({
+
+message:error.message
+
+});
+
+
+}
+
+
+}
+
+);
+
+
+
+
+
+
+
+
 
 /*
 =====================
@@ -444,6 +517,7 @@ ADMIN LOGIN
 
 
 app.post(
+
 "/api/admin/login",
 
 async(req,res)=>{
@@ -452,11 +526,14 @@ async(req,res)=>{
 try{
 
 
-const admin = await Admin.findOne({
+const admin =
+await Admin.findOne({
 
 username:req.body.username
 
 });
+
+
 
 
 
@@ -471,6 +548,7 @@ message:"Invalid credentials"
 
 
 }
+
 
 
 
@@ -491,13 +569,16 @@ message:"Account waiting for approval"
 
 
 
-const match = await bcrypt.compare(
+const match =
+await bcrypt.compare(
 
 req.body.password,
 
 admin.password
 
 );
+
+
 
 
 
@@ -518,7 +599,9 @@ message:"Invalid credentials"
 
 
 
-const token = jwt.sign(
+
+const token =
+jwt.sign(
 
 {
 
@@ -555,185 +638,24 @@ token
 
 }
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
 
 }
+
 
 
 }
 
 );
-
-
-
-
-
-
-
-
-
-/*
-=====================
-ADMIN REGISTER
-=====================
-*/
-
-
-app.post(
-
-"/api/admin/register",
-
-async(req,res)=>{
-
-
-try{
-
-
-const totalAdmins = await Admin.countDocuments();
-
-
-
-if(totalAdmins >= 3){
-
-
-return res.status(400).json({
-
-message:"Maximum admin limit reached"
-
-});
-
-
-}
-
-
-
-
-
-
-
-const exists = await Admin.findOne({
-
-$or:[
-
-{
-
-username:req.body.username
-
-},
-
-{
-
-email:req.body.email
-
-}
-
-]
-
-});
-
-
-
-
-
-
-if(exists){
-
-
-return res.status(400).json({
-
-message:"Admin already exists"
-
-});
-
-
-}
-
-
-
-
-
-
-
-const password = await bcrypt.hash(
-
-req.body.password,
-
-10
-
-);
-
-
-
-
-
-
-
-const admin = new Admin({
-
-username:req.body.username,
-
-email:req.body.email,
-
-password,
-
-role:"admin",
-
-approved:false
-
-});
-
-
-
-
-
-
-await admin.save();
-
-
-
-
-
-
-
-res.json({
-
-success:true,
-
-message:"Registration successful. Await approval"
-
-});
-
-
-
-}
-
-
-catch(err){
-
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-
-}
-
-
-}
-
-);
-
-
 
 /*
 =====================
@@ -743,22 +665,23 @@ FORGOT PASSWORD OTP
 
 
 app.post(
+
 "/api/admin/forgot-password",
+
 async(req,res)=>{
 
 
 try{
 
 
-const {email} = req.body;
+const admin =
+await Admin.findOne({
 
-
-
-const admin = await Admin.findOne({
-
-email: email
+email:req.body.email
 
 });
+
+
 
 
 
@@ -777,11 +700,14 @@ message:"Admin email not found"
 
 
 
-// CREATE OTP
 
-const otp = Math.floor(
 
-100000 + Math.random() * 900000
+const otp =
+Math.floor(
+
+100000 +
+
+Math.random() * 900000
 
 ).toString();
 
@@ -789,11 +715,14 @@ const otp = Math.floor(
 
 
 
-// SAVE OTP
 
 admin.otp = otp;
 
-admin.otpExpiry = Date.now() + 10 * 60 * 1000;
+
+admin.otpExpiry =
+Date.now() + 10 * 60 * 1000;
+
+
 
 
 
@@ -803,15 +732,14 @@ await admin.save();
 
 
 
-// SEND EMAIL
+
 
 await transporter.sendMail({
 
+from:process.env.EMAIL_USER,
 
-from: process.env.EMAIL_USER,
 
-
-to: admin.email,
+to:admin.email,
 
 
 subject:"GODNECHEZ Admin Password Reset OTP",
@@ -820,7 +748,7 @@ subject:"GODNECHEZ Admin Password Reset OTP",
 
 html:`
 
-<div style="font-family:Arial,sans-serif">
+<div style="font-family:Arial">
 
 
 <h2>GODNECHEZ ADMIN</h2>
@@ -839,17 +767,21 @@ html:`
 
 `
 
-
 });
 
 
 
 
+
+
 console.log(
+
 "OTP SENT:",
-admin.email,
-otp
+
+admin.email
+
 );
+
 
 
 
@@ -867,18 +799,23 @@ message:"OTP sent successfully"
 }
 
 
-catch(err){
+
+catch(error){
 
 
 console.log(
-"FORGOT PASSWORD ERROR:",
-err.message
+
+"OTP ERROR:",
+
+error.message
+
 );
+
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -890,6 +827,8 @@ message:err.message
 }
 
 );
+
+
 
 
 
@@ -914,27 +853,24 @@ async(req,res)=>{
 try{
 
 
-const {email, otp} = req.body;
+const admin =
+await Admin.findOne({
+
+email:req.body.email,
 
 
-
-const admin = await Admin.findOne({
-
-
-email: email,
-
-
-otp: otp,
+otp:req.body.otp,
 
 
 otpExpiry:{
 
-$gt: Date.now()
+$gt:Date.now()
 
 }
 
 
 });
+
 
 
 
@@ -955,11 +891,13 @@ message:"Invalid or expired OTP"
 
 
 
+
+
 res.json({
 
 success:true,
 
-message:"OTP verified successfully"
+message:"OTP verified"
 
 });
 
@@ -969,18 +907,12 @@ message:"OTP verified successfully"
 
 
 
-catch(err){
-
-
-console.log(
-"VERIFY OTP ERROR:",
-err.message
-);
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -992,6 +924,11 @@ message:err.message
 }
 
 );
+
+
+
+
+
 
 
 
@@ -1013,7 +950,8 @@ async(req,res)=>{
 try{
 
 
-const admin = await Admin.findOne({
+const admin =
+await Admin.findOne({
 
 email:req.body.email
 
@@ -1041,14 +979,17 @@ message:"Admin not found"
 
 
 
-
-admin.password = await bcrypt.hash(
+admin.password =
+await bcrypt.hash(
 
 req.body.password,
 
 10
 
 );
+
+
+
 
 
 
@@ -1083,12 +1024,12 @@ message:"Password changed successfully"
 
 
 
-catch(err){
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1100,84 +1041,6 @@ message:err.message
 }
 
 );
-
-/*
-=====================
-STATS
-=====================
-*/
-
-
-app.get(
-
-"/api/stats",
-
-protect,
-
-async(req,res)=>{
-
-
-try{
-
-
-const designs = await Design.countDocuments();
-
-
-const team = await Team.countDocuments();
-
-
-const categories = await Design.distinct(
-
-"category"
-
-);
-
-
-
-
-
-res.json({
-
-success:true,
-
-designs,
-
-team,
-
-categories:categories.length
-
-});
-
-
-
-}
-
-
-catch(err){
-
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-
-}
-
-
-
-}
-
-);
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -1186,8 +1049,7 @@ DESIGNS
 */
 
 
-// UPLOAD DESIGN
-
+// ADD DESIGN
 
 app.post(
 
@@ -1212,15 +1074,12 @@ message:"Image required"
 
 });
 
-
 }
 
 
 
-
-
-
-const design = new Design({
+const design =
+new Design({
 
 title:req.body.title,
 
@@ -1231,7 +1090,6 @@ description:req.body.description,
 image:req.file.path
 
 });
-
 
 
 
@@ -1257,15 +1115,15 @@ data:design
 }
 
 
-catch(err){
+catch(error){
 
 
-console.log(err);
+console.log(error);
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1299,14 +1157,14 @@ async(req,res)=>{
 try{
 
 
-const designs = await Design.find()
+const designs =
+await Design.find()
 
 .sort({
 
 createdAt:-1
 
 });
-
 
 
 
@@ -1325,12 +1183,13 @@ data:designs
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1376,7 +1235,6 @@ req.params.id
 
 
 
-
 res.json({
 
 success:true,
@@ -1390,12 +1248,13 @@ message:"Design deleted"
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1440,7 +1299,8 @@ async(req,res)=>{
 try{
 
 
-const member = new Team({
+const member =
+new Team({
 
 name:req.body.name,
 
@@ -1450,7 +1310,9 @@ category:req.body.category || "staff",
 
 bio:req.body.bio,
 
-image:req.file ? req.file.path : ""
+image:req.file ?
+
+req.file.path : ""
 
 });
 
@@ -1479,12 +1341,13 @@ data:member
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1518,7 +1381,8 @@ async(req,res)=>{
 try{
 
 
-const team = await Team.find()
+const team =
+await Team.find()
 
 .sort({
 
@@ -1544,12 +1408,13 @@ data:team
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1609,7 +1474,8 @@ bio:req.body.bio
 if(req.file){
 
 
-update.image=req.file.path;
+update.image =
+req.file.path;
 
 
 }
@@ -1619,7 +1485,8 @@ update.image=req.file.path;
 
 
 
-const member = await Team.findByIdAndUpdate(
+const member =
+await Team.findByIdAndUpdate(
 
 req.params.id,
 
@@ -1651,12 +1518,13 @@ data:member
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1705,7 +1573,9 @@ req.params.id
 
 res.json({
 
-success:true
+success:true,
+
+message:"Team member deleted"
 
 });
 
@@ -1714,12 +1584,13 @@ success:true
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1741,7 +1612,6 @@ FAQ
 
 // ADD FAQ
 
-
 app.post(
 
 "/api/faqs",
@@ -1754,14 +1624,14 @@ async(req,res)=>{
 try{
 
 
-const faq = new FAQ({
+const faq =
+new FAQ({
 
 question:req.body.question,
 
 answer:req.body.answer
 
 });
-
 
 
 
@@ -1787,12 +1657,13 @@ data:faq
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1826,7 +1697,8 @@ async(req,res)=>{
 try{
 
 
-const faqs = await FAQ.find()
+const faqs =
+await FAQ.find()
 
 .sort({
 
@@ -1852,12 +1724,13 @@ data:faqs
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1903,7 +1776,6 @@ req.params.id
 
 
 
-
 res.json({
 
 success:true
@@ -1915,12 +1787,13 @@ success:true
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -1948,7 +1821,7 @@ TESTIMONIALS
 */
 
 
-// CLIENT SUBMIT TESTIMONIAL
+// CLIENT SUBMIT
 
 
 app.post(
@@ -1961,7 +1834,8 @@ async(req,res)=>{
 try{
 
 
-const testimonial = new Testimonial({
+const testimonial =
+new Testimonial({
 
 name:req.body.name,
 
@@ -1970,7 +1844,6 @@ message:req.body.message,
 approved:false
 
 });
-
 
 
 
@@ -1996,12 +1869,13 @@ message:"Submitted successfully"
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2022,7 +1896,7 @@ message:err.message
 
 
 
-// PUBLIC APPROVED TESTIMONIALS
+// PUBLIC APPROVED
 
 
 app.get(
@@ -2035,7 +1909,8 @@ async(req,res)=>{
 try{
 
 
-const testimonials = await Testimonial.find({
+const testimonials =
+await Testimonial.find({
 
 approved:true
 
@@ -2065,12 +1940,13 @@ data:testimonials
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2091,7 +1967,7 @@ message:err.message
 
 
 
-// ADMIN VIEW TESTIMONIALS
+// ADMIN VIEW
 
 
 app.get(
@@ -2106,7 +1982,8 @@ async(req,res)=>{
 try{
 
 
-const testimonials = await Testimonial.find()
+const testimonials =
+await Testimonial.find()
 
 .sort({
 
@@ -2132,12 +2009,13 @@ data:testimonials
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2158,7 +2036,7 @@ message:err.message
 
 
 
-// APPROVE TESTIMONIAL
+// APPROVE / UPDATE
 
 
 app.put(
@@ -2173,7 +2051,8 @@ async(req,res)=>{
 try{
 
 
-const testimonial = await Testimonial.findByIdAndUpdate(
+const testimonial =
+await Testimonial.findByIdAndUpdate(
 
 req.params.id,
 
@@ -2209,12 +2088,13 @@ data:testimonial
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2272,12 +2152,13 @@ success:true
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2289,6 +2170,14 @@ message:err.message
 }
 
 );
+
+
+
+
+
+
+
+
 
 /*
 =====================
@@ -2310,7 +2199,8 @@ async(req,res)=>{
 try{
 
 
-const message = new Message({
+const message =
+new Message({
 
 name:req.body.name,
 
@@ -2348,12 +2238,12 @@ message:"Message sent"
 
 
 
-catch(err){
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2389,7 +2279,8 @@ async(req,res)=>{
 try{
 
 
-const messages = await Message.find()
+const messages =
+await Message.find()
 
 .sort({
 
@@ -2415,12 +2306,13 @@ data:messages
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2478,12 +2370,13 @@ success:true
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2526,7 +2419,8 @@ async(req,res)=>{
 try{
 
 
-const admins = await Admin.find({
+const admins =
+await Admin.find({
 
 approved:false
 
@@ -2550,12 +2444,13 @@ data:admins
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2591,7 +2486,8 @@ async(req,res)=>{
 try{
 
 
-const admin = await Admin.findByIdAndUpdate(
+const admin =
+await Admin.findByIdAndUpdate(
 
 req.params.id,
 
@@ -2603,12 +2499,11 @@ approved:true
 
 {
 
-returnDocument:"after"
+new:true
 
 }
 
 );
-
 
 
 
@@ -2628,12 +2523,13 @@ data:admin
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
@@ -2654,7 +2550,7 @@ message:err.message
 
 
 
-// REJECT / DELETE ADMIN
+// DELETE ADMIN
 
 
 app.delete(
@@ -2693,66 +2589,18 @@ message:"Admin removed"
 }
 
 
-catch(err){
+
+catch(error){
 
 
 res.status(500).json({
 
-message:err.message
+message:error.message
 
 });
 
 
 }
-
-
-
-}
-
-);
-
-
-
-
-
-
-
-
-
-/*
-=====================
-ERROR HANDLING
-=====================
-*/
-
-
-app.use(
-
-(err,req,res,next)=>{
-
-
-console.log(
-
-"SERVER ERROR:",
-
-err
-
-);
-
-
-
-
-
-
-res.status(500).json({
-
-success:false,
-
-message:
-
-err.message || "Server error"
-
-});
 
 
 
