@@ -9,33 +9,26 @@
 
 <title>GODNECHEZ ADMIN</title>
 
-
 <style>
 
 :root{
-
 --black:#0B0F14;
 --yellow:#0f4cb4;
 --red:#E63946;
-
 }
 
 
 *{
-
 margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
-
 }
 
 
 body{
-
 background:#f4f4f4;
 color:#111;
-
 }
 
 
@@ -47,9 +40,7 @@ color:white;
 padding:20px;
 
 display:flex;
-
 justify-content:space-between;
-
 align-items:center;
 
 }
@@ -160,11 +151,13 @@ border-radius:10px;
 }
 
 
+
 textarea{
 
 height:100px;
 
 }
+
 
 
 button{
@@ -194,6 +187,7 @@ color:white;
 }
 
 
+
 .items{
 
 display:grid;
@@ -205,6 +199,7 @@ gap:20px;
 margin-top:20px;
 
 }
+
 
 
 .item img{
@@ -225,7 +220,6 @@ border-radius:10px;
 </head>
 
 
-
 <body>
 
 
@@ -237,20 +231,14 @@ GODNECHEZ ADMIN
 
 
 <button onclick="logout()">
-
 Logout
-
 </button>
-
 
 </header>
 
 
 
-
-
 <div class="container">
-
 
 
 <div class="stats">
@@ -270,7 +258,6 @@ Designs
 
 
 
-
 <div class="card">
 
 <h1 id="teamCount">
@@ -282,7 +269,6 @@ Team
 </p>
 
 </div>
-
 
 
 
@@ -299,14 +285,7 @@ Categories
 </div>
 
 
-
 </div>
-
-
-
-
-
-
 
 
 <div class="grid">
@@ -326,41 +305,27 @@ Upload Design
 <select id="category">
 
 <option>Logos</option>
-
 <option>Flyers</option>
-
 <option>Branding</option>
-
 <option>DTF</option>
-
 <option>Banners</option>
 
 </select>
-
 
 
 <textarea id="description"
 placeholder="Description"></textarea>
 
 
-
 <input type="file" id="designImage">
 
 
-
 <button onclick="uploadDesign()">
-
 Upload Design
-
 </button>
 
 
 </div>
-
-
-
-
-
 
 
 
@@ -372,50 +337,32 @@ Upload Team Member
 </h2>
 
 
-
-<input id="teamName"
-placeholder="Name">
+<input id="teamName" placeholder="Name">
 
 
-<input id="teamPosition"
-placeholder="Position">
-
+<input id="teamPosition" placeholder="Position">
 
 
 <select id="teamCategory">
 
-<option value="CEO">
-CEO
-</option>
+<option value="CEO">CEO</option>
 
+<option value="MD">MD</option>
 
-<option value="MD">
-MD
-</option>
-
-
-<option value="staff">
-Staff
-</option>
-
+<option value="staff">Staff</option>
 
 </select>
-
 
 
 <textarea id="teamBio"
 placeholder="Bio"></textarea>
 
 
-
 <input type="file" id="teamImage">
 
 
-
 <button onclick="saveTeam()">
-
 Save Member
-
 </button>
 
 
@@ -423,189 +370,54 @@ Save Member
 
 
 </div>
-
-
-
-
-<!-- LIBRARIES -->
-
-
-<h2 style="margin-top:50px">
-Team Library
-</h2>
-
-
-<div class="items" id="teamList"></div>
-
-
-
-
-
-<h2 style="margin-top:50px">
-Design Library
-</h2>
-
-
-<div class="items" id="designList"></div>
-
-
-
-
-
-<h2 style="margin-top:50px">
-Client Messages
-</h2>
-
-
-<div class="items" id="messageList"></div>
-
-
-
-
-
-
-<h2 style="margin-top:50px">
-FAQ Management
-</h2>
-
-
-
-<div class="box">
-
-
-<input id="faqQuestion"
-placeholder="Question">
-
-
-<textarea id="faqAnswer"
-placeholder="Answer"></textarea>
-
-
-
-<button onclick="addFAQ()">
-
-Add FAQ
-
-</button>
-
-
-</div>
-
-
-<div class="items" id="faqList"></div>
-
-
-
-
-
-
-<h2 style="margin-top:50px">
-Testimonials
-</h2>
-
-
-<div class="items" id="testimonialList"></div>
-
-
-
-
-
-
-<h2 style="margin-top:50px">
-Admin Management
-</h2>
-
-
-<div class="items" id="adminList"></div>
-
-
-
-
-
-
-
 
 <script>
 
+const API = "https://godnechez-creative-solutions.onrender.com";
 
-const API="https://godnechez-creative-solutions.onrender.com/;
+const token = localStorage.getItem("adminToken");
 
-
-const token=localStorage.getItem("adminToken");
-
-
-
-if(!token){
-
-window.location.href="admin-login.html";
-
+if (!token) {
+    window.location.href = "admin-login.html";
 }
 
-
-
-
-
-
-
-function logout(){
-
-localStorage.removeItem("adminToken");
-
-window.location.href="admin-login.html";
-
+function logout() {
+    localStorage.removeItem("adminToken");
+    window.location.href = "admin-login.html";
 }
 
+/*
+====================
+STATS
+====================
+*/
 
+async function loadStats() {
 
+    try {
 
+        const res = await fetch(
+            API + "/api/stats",
+            {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            }
+        );
 
+        const data = await res.json();
 
+        designCount.innerHTML = data.designs || 0;
+        teamCount.innerHTML = data.team || 0;
+        categoryCount.innerHTML = data.categories || 0;
 
+    } catch (err) {
 
+        console.log(err);
 
-async function loadStats(){
-
-
-const res=await fetch(
-
-API+"/api/stats",
-
-{
-
-headers:{
-
-Authorization:"Bearer "+token
-
-}
-
-}
-
-);
-
-
-
-const data=await res.json();
-
-
-
-designCount.innerHTML=data.designs || 0;
-
-
-teamCount.innerHTML=data.team || 0;
-
-
-categoryCount.innerHTML=data.categories || 0;
-
+    }
 
 }
-
-
-
-
-
-
-
-
 
 /*
 ====================
@@ -613,220 +425,124 @@ DESIGNS
 ====================
 */
 
+async function uploadDesign() {
 
+    const file = designImage.files[0];
 
-async function uploadDesign(){
+    if (!file) {
+        alert("Select image");
+        return;
+    }
 
+    const form = new FormData();
 
+    form.append("title", title.value);
+    form.append("category", category.value);
+    form.append("description", description.value);
+    form.append("image", file);
 
-const file=designImage.files[0];
+    try {
 
+        const res = await fetch(
+            API + "/api/designs",
+            {
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + token
+                },
+                body: form
+            }
+        );
 
+        const data = await res.json();
 
-if(!file){
+        if (data.success) {
 
-alert("Select image");
+            alert("Uploaded");
 
-return;
+            title.value = "";
+            description.value = "";
+            designImage.value = "";
 
-}
+            loadDesigns();
+            loadStats();
 
+        } else {
 
+            alert(data.message);
 
+        }
 
+    } catch (err) {
 
-const form=new FormData();
+        alert("Upload failed");
 
-
-
-form.append("title",title.value);
-
-
-form.append("category",category.value);
-
-
-form.append("description",description.value);
-
-
-form.append("image",file);
-
-
-
-
-
-
-const res=await fetch(
-
-API+"/api/designs",
-
-{
-
-method:"POST",
-
-headers:{
-
-Authorization:"Bearer "+token
-
-},
-
-body:form
+    }
 
 }
 
-);
+async function loadDesigns() {
 
+    try {
 
+        const res = await fetch(
+            API + "/api/designs"
+        );
 
-const data=await res.json();
+        const data = await res.json();
 
+        designList.innerHTML = "";
 
+        data.data.forEach(d => {
 
-if(data.success){
+            designList.innerHTML += `
 
+            <div class="item">
 
-alert("Uploaded");
+                <img src="${d.image}" alt="${d.title}">
 
+                <h3>${d.title}</h3>
 
-title.value="";
+                <p>${d.category}</p>
 
+                <button
+                class="delete"
+                onclick="deleteDesign('${d._id}')">
 
-description.value="";
+                Delete
 
+                </button>
 
-designImage.value="";
+            </div>
 
+            `;
 
-loadDesigns();
+        });
 
+    } catch (err) {
 
-loadStats();
+        console.log(err);
 
+    }
 
 }
 
-else{
+async function deleteDesign(id) {
 
+    await fetch(
+        API + "/api/designs/" + id,
+        {
+            method: "DELETE",
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }
+    );
 
-alert(data.message);
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-async function loadDesigns(){
-
-
-const res=await fetch(
-
-API+"/api/designs"
-
-);
-
-
-const data=await res.json();
-
-
-
-designList.innerHTML="";
-
-
-
-data.data.forEach(d=>{
-
-
-designList.innerHTML+=`
-
-
-<div class="item">
-
-
-<img src="${d.image}">
-
-
-<h3>${d.title}</h3>
-
-
-<p>${d.category}</p>
-
-
-
-<button class="delete"
-
-onclick="deleteDesign('${d._id}')">
-
-Delete
-
-</button>
-
-
-</div>
-
-
-`;
-
-
-
-});
-
+    loadDesigns();
+    loadStats();
 
 }
-
-
-
-
-
-
-
-
-
-async function deleteDesign(id){
-
-
-await fetch(
-
-API+"/api/designs/"+id,
-
-{
-
-method:"DELETE",
-
-headers:{
-
-Authorization:"Bearer "+token
-
-}
-
-}
-
-);
-
-
-
-loadDesigns();
-
-loadStats();
-
-
-}
-
-
-
-
-
-
-
-
 
 /*
 ====================
@@ -834,210 +550,125 @@ TEAM
 ====================
 */
 
+async function saveTeam() {
 
+    const file = teamImage.files[0];
 
-async function saveTeam(){
+    const form = new FormData();
 
+    form.append("name", teamName.value);
+    form.append("position", teamPosition.value);
+    form.append("category", teamCategory.value);
+    form.append("bio", teamBio.value);
 
-const file=teamImage.files[0];
+    if (file) {
+        form.append("image", file);
+    }
 
+    try {
 
+        const res = await fetch(
+            API + "/api/team",
+            {
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + token
+                },
+                body: form
+            }
+        );
 
-const form=new FormData();
+        const data = await res.json();
 
+        if (data.success) {
 
+            alert("Member saved");
 
-form.append("name",teamName.value);
+            teamName.value = "";
+            teamPosition.value = "";
+            teamBio.value = "";
+            teamImage.value = "";
 
+            loadTeam();
+            loadStats();
 
-form.append("position",teamPosition.value);
+        } else {
 
+            alert(data.message);
 
-form.append("category",teamCategory.value);
+        }
 
+    } catch (err) {
 
-form.append("bio",teamBio.value);
+        alert("Upload failed");
 
-
-
-if(file){
-
-form.append("image",file);
-
-}
-
-
-
-
-const res=await fetch(
-
-API+"/api/team",
-
-{
-
-method:"POST",
-
-headers:{
-
-Authorization:"Bearer "+token
-
-},
-
-body:form
-
-}
-
-);
-
-
-
-const data=await res.json();
-
-
-
-if(data.success){
-
-
-alert("Member saved");
-
-
-teamName.value="";
-
-
-teamPosition.value="";
-
-
-teamBio.value="";
-
-
-teamImage.value="";
-
-
-loadTeam();
-
-
-loadStats();
-
+    }
 
 }
 
+async function loadTeam() {
 
-else{
+    try {
 
+        const res = await fetch(
+            API + "/api/team"
+        );
 
-alert(data.message);
+        const data = await res.json();
 
+        teamList.innerHTML = "";
 
-}
+        data.data.forEach(t => {
 
+            teamList.innerHTML += `
 
-}
+            <div class="item">
 
+                <img src="${t.image}" alt="${t.name}">
 
+                <h3>${t.name}</h3>
 
+                <p>${t.position}</p>
 
+                <p>${t.category}</p>
 
+                <button
+                class="delete"
+                onclick="deleteTeam('${t._id}')">
 
+                Delete
 
+                </button>
 
-async function loadTeam(){
+            </div>
 
+            `;
 
-const res=await fetch(
+        });
 
-API+"/api/team"
+    } catch (err) {
 
-);
+        console.log(err);
 
-
-
-const data=await res.json();
-
-
-
-teamList.innerHTML="";
-
-
-
-data.data.forEach(t=>{
-
-
-teamList.innerHTML+=`
-
-
-<div class="item">
-
-
-<img src="${t.image}">
-
-
-<h3>${t.name}</h3>
-
-
-<p>${t.position}</p>
-
-
-<p>${t.category}</p>
-
-
-
-<button class="delete"
-
-onclick="deleteTeam('${t._id}')">
-
-Delete
-
-</button>
-
-
-</div>
-
-
-`;
-
-
-
-});
-
+    }
 
 }
 
+async function deleteTeam(id) {
 
+    await fetch(
+        API + "/api/team/" + id,
+        {
+            method: "DELETE",
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }
+    );
 
-
-
-
-
-
-async function deleteTeam(id){
-
-
-await fetch(
-
-API+"/api/team/"+id,
-
-{
-
-method:"DELETE",
-
-headers:{
-
-Authorization:"Bearer "+token
+    loadTeam();
 
 }
-
-}
-
-);
-
-
-
-loadTeam();
-
-
-}
-
-
 
 /*
 ====================
@@ -1045,178 +676,91 @@ FAQ
 ====================
 */
 
-
-
 async function addFAQ(){
 
+    const res = await fetch(
+        API + "/api/faqs",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:"Bearer " + token
+            },
+            body:JSON.stringify({
+                question:faqQuestion.value,
+                answer:faqAnswer.value
+            })
+        }
+    );
 
+    const data = await res.json();
 
-const res=await fetch(
+    if(data.success){
 
-API+"/api/faqs",
+        faqQuestion.value="";
+        faqAnswer.value="";
 
-{
+        loadFAQ();
 
-method:"POST",
+    }else{
 
-headers:{
+        alert(data.message);
 
-"Content-Type":"application/json",
-
-Authorization:"Bearer "+token
-
-},
-
-body:JSON.stringify({
-
-question:faqQuestion.value,
-
-answer:faqAnswer.value
-
-})
-
-}
-
-);
-
-
-
-const data=await res.json();
-
-
-
-if(data.success){
-
-
-faqQuestion.value="";
-
-
-faqAnswer.value="";
-
-
-loadFAQ();
-
+    }
 
 }
-
-else{
-
-
-alert(data.message);
-
-
-}
-
-
-}
-
-
-
-
-
-
-
 
 async function loadFAQ(){
 
+    const res = await fetch(
+        API + "/api/faqs"
+    );
 
-const res=await fetch(
+    const data = await res.json();
 
-API+"/api/faqs"
+    faqList.innerHTML="";
 
-);
+    data.data.forEach(f=>{
 
+        faqList.innerHTML += `
 
+        <div class="item">
 
-const data=await res.json();
+            <h3>${f.question}</h3>
 
+            <p>${f.answer}</p>
 
+            <button
+            class="delete"
+            onclick="deleteFAQ('${f._id}')">
 
-faqList.innerHTML="";
+            Delete
 
+            </button>
 
+        </div>
 
-data.data.forEach(f=>{
+        `;
 
-
-faqList.innerHTML+=`
-
-
-<div class="item">
-
-
-<h3>${f.question}</h3>
-
-
-<p>${f.answer}</p>
-
-
-
-<button class="delete"
-
-onclick="deleteFAQ('${f._id}')">
-
-Delete
-
-</button>
-
-
-</div>
-
-
-`;
-
-
-
-});
-
+    });
 
 }
-
-
-
-
-
-
 
 async function deleteFAQ(id){
 
+    await fetch(
+        API + "/api/faqs/" + id,
+        {
+            method:"DELETE",
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }
+    );
 
-await fetch(
-
-API+"/api/faqs/"+id,
-
-{
-
-method:"DELETE",
-
-headers:{
-
-Authorization:"Bearer "+token
-
-}
+    loadFAQ();
 
 }
-
-);
-
-
-
-loadFAQ();
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 ====================
@@ -1224,126 +768,66 @@ MESSAGES
 ====================
 */
 
-
-
 async function loadMessages(){
 
+    const res = await fetch(
+        API + "/api/messages",
+        {
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }
+    );
 
-const res=await fetch(
+    const data = await res.json();
 
-API+"/api/messages",
+    messageList.innerHTML="";
 
-{
+    data.data.forEach(m=>{
 
-headers:{
+        messageList.innerHTML += `
 
-Authorization:"Bearer "+token
+        <div class="item">
 
-}
+            <h3>${m.name}</h3>
 
-}
+            <p>${m.email}</p>
 
-);
+            <p>${m.subject}</p>
 
+            <p>${m.message}</p>
 
+            <button
+            class="delete"
+            onclick="deleteMessage('${m._id}')">
 
-const data=await res.json();
+            Delete
 
+            </button>
 
+        </div>
 
-messageList.innerHTML="";
+        `;
 
-
-
-data.data.forEach(m=>{
-
-
-messageList.innerHTML+=`
-
-
-<div class="item">
-
-
-<h3>${m.name}</h3>
-
-
-<p>${m.email}</p>
-
-
-<p>${m.subject}</p>
-
-
-<p>${m.message}</p>
-
-
-
-<button class="delete"
-
-onclick="deleteMessage('${m._id}')">
-
-Delete
-
-</button>
-
-
-</div>
-
-
-`;
-
-
-
-});
-
+    });
 
 }
-
-
-
-
-
-
-
-
 
 async function deleteMessage(id){
 
+    await fetch(
+        API + "/api/messages/" + id,
+        {
+            method:"DELETE",
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }
+    );
 
-await fetch(
-
-API+"/api/messages/"+id,
-
-{
-
-method:"DELETE",
-
-headers:{
-
-Authorization:"Bearer "+token
-
-}
+    loadMessages();
 
 }
-
-);
-
-
-
-loadMessages();
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 ====================
@@ -1351,172 +835,91 @@ TESTIMONIALS
 ====================
 */
 
-
-
 async function loadTestimonials(){
 
+    const res = await fetch(
+        API + "/api/testimonials/admin",
+        {
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }
+    );
 
+    const data = await res.json();
 
-const res=await fetch(
+    testimonialList.innerHTML="";
 
-API+"/api/testimonials/admin",
+    data.data.forEach(t=>{
 
-{
+        testimonialList.innerHTML += `
 
-headers:{
+        <div class="item">
 
-Authorization:"Bearer "+token
+            <h3>${t.name}</h3>
 
-}
+            <p>${t.message}</p>
 
-}
+            <p>${t.approved ? "Approved" : "Pending"}</p>
 
-);
+            <button
+            onclick="approveTestimonial('${t._id}')">
 
+            Approve
 
+            </button>
 
-const data=await res.json();
+            <button
+            class="delete"
+            onclick="deleteTestimonial('${t._id}')">
 
+            Delete
 
+            </button>
 
-testimonialList.innerHTML="";
+        </div>
 
+        `;
 
-
-data.data.forEach(t=>{
-
-
-testimonialList.innerHTML+=`
-
-
-<div class="item">
-
-
-<h3>${t.name}</h3>
-
-
-<p>${t.message}</p>
-
-
-<p>
-
-${t.approved ? "Approved":"Pending"}
-
-</p>
-
-
-
-
-<button onclick="approveTestimonial('${t._id}')">
-
-Approve
-
-</button>
-
-
-
-
-<button class="delete"
-
-onclick="deleteTestimonial('${t._id}')">
-
-Delete
-
-</button>
-
-
-
-</div>
-
-
-`;
-
-
-
-});
-
+    });
 
 }
-
-
-
-
-
-
-
 
 async function approveTestimonial(id){
 
+    await fetch(
+        API + "/api/testimonials/" + id,
+        {
+            method:"PUT",
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:"Bearer " + token
+            },
+            body:JSON.stringify({
+                approved:true
+            })
+        }
+    );
 
-
-await fetch(
-
-API+"/api/testimonials/"+id,
-
-{
-
-method:"PUT",
-
-headers:{
-
-"Content-Type":"application/json",
-
-Authorization:"Bearer "+token
-
-},
-
-body:JSON.stringify({
-
-approved:true
-
-})
+    loadTestimonials();
 
 }
-
-);
-
-
-
-loadTestimonials();
-
-
-}
-
-
-
-
-
-
-
 
 async function deleteTestimonial(id){
 
+    await fetch(
+        API + "/api/testimonials/" + id,
+        {
+            method:"DELETE",
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }
+    );
 
-await fetch(
-
-API+"/api/testimonials/"+id,
-
-{
-
-method:"DELETE",
-
-headers:{
-
-Authorization:"Bearer "+token
-
-}
+    loadTestimonials();
 
 }
-
-);
-
-
-
-loadTestimonials();
-
-
-}
-
 
 /*
 ====================
@@ -1524,187 +927,97 @@ ADMIN MANAGEMENT
 ====================
 */
 
-
-
 async function loadAdmins(){
 
+    const res = await fetch(
+        API + "/api/admin/pending",
+        {
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }
+    );
 
+    const data = await res.json();
 
-const res=await fetch(
+    adminList.innerHTML="";
 
-API+"/api/admin/pending",
+    if(!data.data || data.data.length === 0){
 
-{
+        adminList.innerHTML = `
+        <div class="item">
+            <p>No pending admins</p>
+        </div>
+        `;
 
-headers:{
+        return;
 
-Authorization:"Bearer "+token
+    }
 
-}
+    data.data.forEach(admin=>{
 
-}
+        adminList.innerHTML += `
 
-);
+        <div class="item">
 
+            <h3>${admin.username}</h3>
 
+            <p>${admin.email}</p>
 
-const data=await res.json();
+            <button
+            onclick="approveAdmin('${admin._id}')">
 
+            Approve
 
+            </button>
 
-adminList.innerHTML="";
+            <button
+            class="delete"
+            onclick="rejectAdmin('${admin._id}')">
 
+            Reject
 
+            </button>
 
-if(!data.data || data.data.length===0){
+        </div>
 
+        `;
 
-adminList.innerHTML=`
-
-<div class="item">
-
-<p>No pending admins</p>
-
-</div>
-
-`;
-
-return;
-
-
-}
-
-
-
-
-
-data.data.forEach(admin=>{
-
-
-adminList.innerHTML+=`
-
-
-<div class="item">
-
-
-<h3>${admin.username}</h3>
-
-
-<p>${admin.email}</p>
-
-
-
-
-<button onclick="approveAdmin('${admin._id}')">
-
-Approve
-
-</button>
-
-
-
-
-<button class="delete"
-
-onclick="rejectAdmin('${admin._id}')">
-
-Reject
-
-</button>
-
-
-
-</div>
-
-
-`;
-
-
-
-});
-
+    });
 
 }
-
-
-
-
-
-
-
 
 async function approveAdmin(id){
 
+    await fetch(
+        API + "/api/admin/approve/" + id,
+        {
+            method:"PUT",
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }
+    );
 
-
-await fetch(
-
-API+"/api/admin/approve/"+id,
-
-{
-
-method:"PUT",
-
-headers:{
-
-Authorization:"Bearer "+token
+    loadAdmins();
 
 }
-
-}
-
-);
-
-
-
-loadAdmins();
-
-
-}
-
-
-
-
-
-
-
 
 async function rejectAdmin(id){
 
+    await fetch(
+        API + "/api/admin/reject/" + id,
+        {
+            method:"DELETE",
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }
+    );
 
-
-await fetch(
-
-API+"/api/admin/reject/"+id,
-
-{
-
-method:"DELETE",
-
-headers:{
-
-Authorization:"Bearer "+token
+    loadAdmins();
 
 }
-
-}
-
-);
-
-
-
-loadAdmins();
-
-
-}
-
-
-
-
-
-
-
-
 
 /*
 ====================
@@ -1712,38 +1025,20 @@ LOAD ALL DATA
 ====================
 */
 
-
-
 loadStats();
-
-
 loadDesigns();
-
-
 loadTeam();
-
-
 loadMessages();
-
-
 loadFAQ();
-
-
 loadTestimonials();
-
-
 loadAdmins();
-
-
-
 
 </script>
 
-
-
 </div>
 
-
 </body>
-
 </html>
+
+
+

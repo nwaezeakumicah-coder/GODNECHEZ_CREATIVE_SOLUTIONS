@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -9,9 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
-const {CloudinaryStorage} = require("multer-storage-cloudinary");
-
-
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const Design = require("./models/Design");
 const Team = require("./models/Team");
@@ -20,19 +17,13 @@ const FAQ = require("./models/FAQ");
 const Testimonial = require("./models/Testimonial");
 const Message = require("./models/Message");
 
-
-
 const app = express();
-
-
 
 const PORT = process.env.PORT || 5000;
 
-
-const SECRET = process.env.JWT_SECRET || "godnechez_secret";
-
-
-
+const SECRET =
+process.env.JWT_SECRET ||
+"godnechez_secret";
 
 /*
 =====================
@@ -40,46 +31,44 @@ CLOUDINARY
 =====================
 */
 
-
 cloudinary.config({
 
-cloud_name: process.env.CLOUD_NAME,
+  cloud_name:
+  process.env.CLOUD_NAME,
 
-api_key: process.env.CLOUD_API_KEY,
+  api_key:
+  process.env.CLOUD_API_KEY,
 
-api_secret: process.env.CLOUD_API_SECRET
-
-});
-
-
-
-
-const storage = new CloudinaryStorage({
-
-cloudinary: cloudinary,
-
-params: {
-
-folder: "godnechez",
-
-resource_type: "image"
-
-}
+  api_secret:
+  process.env.CLOUD_API_SECRET
 
 });
 
+const storage =
+new CloudinaryStorage({
 
+  cloudinary: cloudinary,
 
+  params: {
+
+    folder: "godnechez",
+
+    resource_type: "image"
+
+  }
+
+});
 
 const upload = multer({
 
-storage: storage,
+  storage: storage,
 
-limits: {
+  limits: {
 
-fileSize: 10 * 1024 * 1024
+    fileSize:
+    10 * 1024 * 1024
 
-}
+  }
 
 });
 
@@ -89,24 +78,22 @@ EMAIL
 =====================
 */
 
+const transporter =
+nodemailer.createTransport({
 
-const transporter = nodemailer.createTransport({
+  service: "gmail",
 
-service:"gmail",
+  auth: {
 
-auth:{
+    user:
+    process.env.EMAIL_USER,
 
-user:process.env.EMAIL_USER,
+    pass:
+    process.env.EMAIL_PASS
 
-pass:process.env.EMAIL_PASS
-
-}
+  }
 
 });
-
-
-
-
 
 /*
 =====================
@@ -114,135 +101,108 @@ MIDDLEWARE
 =====================
 */
 
-
-app.use(cors());
-
+app.use(
+  cors({
+    origin: [
+      "https://nwaezeakumicah-coder.github.io",
+      "http://localhost:5500",
+      "http://127.0.0.1:5500"
+    ],
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE"
+    ],
+    credentials: true
+  })
+);
 
 app.use(express.json());
 
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+);
 
-app.use(express.urlencoded({
+mongoose.connect(
+  process.env.MONGO_URI
+)
 
-extended:true
+.then(() => {
 
-}));
-
-
-
-
-
-
-
-mongoose.connect(process.env.MONGO_URI)
-
-.then(()=>{
-
-console.log("MongoDB Connected");
+  console.log(
+    "MongoDB Connected"
+  );
 
 })
 
-.catch(err=>{
+.catch(err => {
 
-console.log(
-
-"MongoDB Error:",
-
-err.message
-
-);
+  console.log(
+    "MongoDB Error:",
+    err.message
+  );
 
 });
-
-
-
-
-
-
-
-
 /*
 =====================
 AUTH CHECK
 =====================
 */
 
+function protect(req, res, next) {
 
-function protect(req,res,next){
+  const header = req.headers.authorization;
 
+  if (!header) {
 
-const header = req.headers.authorization;
+    return res.status(401).json({
+      message: "No token"
+    });
 
+  }
 
+  const token = header.split(" ")[1];
 
-if(!header){
+  try {
 
-return res.status(401).json({
+    const decoded = jwt.verify(
+      token,
+      SECRET
+    );
 
-message:"No token"
+    req.admin = decoded;
 
-});
+    next();
 
-}
+  }
 
+  catch (error) {
 
+    return res.status(401).json({
+      message: "Invalid token"
+    });
 
-const token = header.split(" ")[1];
-
-
-
-try{
-
-
-const decoded = jwt.verify(
-
-token,
-
-SECRET
-
-);
-
-
-req.admin = decoded;
-
-
-next();
-
-
+  }
 
 }
 
-catch(error){
+/*
+=====================
+ROOT
+=====================
+*/
 
+app.get("/", (req, res) => {
 
-return res.status(401).json({
+  res.json({
 
-message:"Invalid token"
+    message:
+    "GODNECHEZ Backend Running"
 
-});
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-
-
-app.get("/",(req,res)=>{
-
-
-res.json({
-
-message:"GODNECHEZ Backend Running"
-
-});
-
+  });
 
 });
 
@@ -252,427 +212,281 @@ ADMIN SYSTEM
 =====================
 */
 
-
 // LOGIN
 
 app.post(
-"/api/admin/login",
-async(req,res)=>{
+  "/api/admin/login",
+  async (req, res) => {
 
+    try {
 
-try{
+      const admin =
+      await Admin.findOne({
 
+        username:
+        req.body.username
 
-const admin = await Admin.findOne({
+      });
 
-username:req.body.username
+      if (!admin) {
 
-});
+        return res.status(401).json({
 
+          message:
+          "Invalid credentials"
 
+        });
 
-if(!admin){
+      }
 
-return res.status(401).json({
+      if (!admin.approved) {
 
-message:"Invalid credentials"
+        return res.status(403).json({
 
-});
+          message:
+          "Account waiting for approval"
 
-}
+        });
 
+      }
 
+      const match =
+      await bcrypt.compare(
 
+        req.body.password,
+        admin.password
 
-if(!admin.approved){
+      );
 
-return res.status(403).json({
+      if (!match) {
 
-message:"Account waiting for approval"
+        return res.status(401).json({
 
-});
+          message:
+          "Invalid credentials"
 
-}
+        });
 
+      }
 
+      const token = jwt.sign(
 
+        {
+          id: admin._id,
+          role: admin.role
+        },
 
-const match = await bcrypt.compare(
+        SECRET,
 
-req.body.password,
+        {
+          expiresIn: "2h"
+        }
 
-admin.password
+      );
 
+      res.json({
+
+        success: true,
+        token
+
+      });
+
+    }
+
+    catch (err) {
+
+      res.status(500).json({
+
+        message:
+        err.message
+
+      });
+
+    }
+
+  }
 );
-
-
-
-
-if(!match){
-
-return res.status(401).json({
-
-message:"Invalid credentials"
-
-});
-
-}
-
-
-
-
-const token = jwt.sign(
-
-{
-
-id:admin._id,
-
-role:admin.role
-
-},
-
-SECRET,
-
-{
-
-expiresIn:"2h"
-
-}
-
-);
-
-
-
-
-
-res.json({
-
-success:true,
-
-token
-
-});
-
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
-
-
-
-
-
-
-
-
-
-
 
 // REGISTER ADMIN
 
-
 app.post(
+  "/api/admin/register",
+  async (req, res) => {
 
-"/api/admin/register",
+    try {
 
-async(req,res)=>{
+      const totalAdmins =
+      await Admin.countDocuments();
 
+      if (totalAdmins >= 3) {
 
-try{
+        return res.status(400).json({
 
+          message:
+          "Maximum admin limit reached"
 
-const totalAdmins = await Admin.countDocuments();
+        });
 
+      }
 
+      const exists =
+      await Admin.findOne({
 
-if(totalAdmins >= 3){
+        $or: [
 
-return res.status(400).json({
+          {
+            username:
+            req.body.username
+          },
 
-message:"Maximum admin limit reached"
+          {
+            email:
+            req.body.email
+          }
 
-});
+        ]
 
-}
+      });
 
+      if (exists) {
 
+        return res.status(400).json({
 
+          message:
+          "Admin already exists"
 
+        });
 
-const exists = await Admin.findOne({
+      }
 
-$or:[
+      const password =
+      await bcrypt.hash(
 
-{
+        req.body.password,
+        10
 
-username:req.body.username
+      );
 
-},
+      const admin =
+      new Admin({
 
-{
+        username:
+        req.body.username,
 
-email:req.body.email
+        email:
+        req.body.email,
 
-}
+        password,
 
-]
+        role: "admin",
 
-});
+        approved: false
 
+      });
 
+      await admin.save();
 
+      res.json({
 
+        success: true,
 
-if(exists){
+        message:
+        "Registration successful. Await approval"
 
-return res.status(400).json({
+      });
 
-message:"Admin already exists"
+    }
 
-});
+    catch (err) {
 
-}
+      res.status(500).json({
 
+        message:
+        err.message
 
+      });
 
+    }
 
-
-const password = await bcrypt.hash(
-
-req.body.password,
-
-10
-
+  }
 );
-
-
-
-
-
-const admin = new Admin({
-
-username:req.body.username,
-
-email:req.body.email,
-
-password,
-
-role:"admin",
-
-approved:false
-
-});
-
-
-
-
-
-await admin.save();
-
-
-
-
-
-res.json({
-
-success:true,
-
-message:"Registration successful. Await approval"
-
-});
-
-
-
-}
-
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
-
-
-
-
-
-
-
-
-
-
 
 
 // PENDING ADMINS
 
-
 app.get(
+  "/api/admin/pending",
+  protect,
+  async (req, res) => {
 
-"/api/admin/pending",
+    const admins =
+    await Admin.find({
 
-protect,
+      approved: false
 
-async(req,res)=>{
+    });
 
+    res.json({
 
-const admins = await Admin.find({
+      success: true,
+      data: admins
 
-approved:false
+    });
 
-});
-
-
-
-
-
-res.json({
-
-success:true,
-
-data:admins
-
-});
-
-
-}
-
+  }
 );
-
-
-
-
-
-
-
-
-
-
-
 
 // APPROVE ADMIN
 
-
 app.put(
+  "/api/admin/approve/:id",
+  protect,
+  async (req, res) => {
 
-"/api/admin/approve/:id",
+    const admin =
+    await Admin.findByIdAndUpdate(
 
-protect,
+      req.params.id,
 
-async(req,res)=>{
+      {
+        approved: true
+      },
 
+      {
+        new: true
+      }
 
-const admin = await Admin.findByIdAndUpdate(
+    );
 
-req.params.id,
+    res.json({
 
-{
+      success: true,
+      data: admin
 
-approved:true
+    });
 
-},
-
-{
-
-new:true
-
-}
-
+  }
 );
 
-
-
-
-
-res.json({
-
-success:true,
-
-data:admin
-
-});
-
-
-}
-
-);
-
-
-
-
-
-
-
-
-
-
-
-// DELETE ADMIN
-
+// DELETE / REJECT ADMIN
 
 app.delete(
+  "/api/admin/reject/:id",
+  protect,
+  async (req, res) => {
 
-"/api/admin/reject/:id",
+    await Admin.findByIdAndDelete(
+      req.params.id
+    );
 
-protect,
+    res.json({
 
-async(req,res)=>{
+      success: true
 
+    });
 
-await Admin.findByIdAndDelete(
-
-req.params.id
-
+  }
 );
-
-
-
-
-
-res.json({
-
-success:true
-
-});
-
-
-}
-
-);
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -680,275 +494,177 @@ FORGOT PASSWORD OTP
 =====================
 */
 
-
 app.post(
+  "/api/admin/forgot-password",
+  async (req, res) => {
 
-"/api/admin/forgot-password",
+    try {
 
-async(req,res)=>{
+      const admin =
+      await Admin.findOne({
 
+        email: req.body.email
 
-try{
+      });
 
+      if (!admin) {
 
-const admin = await Admin.findOne({
+        return res.status(404).json({
 
-email:req.body.email
+          message: "Admin not found"
 
-});
+        });
 
+      }
 
+      const otp =
+      Math.floor(
+        100000 +
+        Math.random() * 900000
+      ).toString();
 
+      admin.otp = otp;
 
+      admin.otpExpiry =
+      Date.now() + 600000;
 
-if(!admin){
+      await admin.save();
 
-return res.status(404).json({
+      await transporter.sendMail({
 
-message:"Admin not found"
+        from:
+        process.env.EMAIL_USER,
 
-});
+        to:
+        admin.email,
 
-}
+        subject:
+        "GODNECHEZ Password Reset",
 
+        html: `
 
+        <h2>GODNECHEZ ADMIN</h2>
 
+        <p>Your OTP:</p>
 
+        <h1>${otp}</h1>
 
-const otp = Math.floor(
+        <p>Expires in 10 minutes</p>
 
-100000 +
+        `
 
-Math.random()*900000
+      });
 
-).toString();
+      res.json({
 
+        success: true,
+        message: "OTP sent"
 
+      });
 
+    }
 
+    catch (err) {
 
-admin.otp = otp;
+      res.status(500).json({
 
+        message:
+        err.message
 
-admin.otpExpiry = Date.now()+600000;
+      });
 
+    }
 
-
-
-
-await admin.save();
-
-
-
-
-
-
-
-
-await transporter.sendMail({
-
-from:process.env.EMAIL_USER,
-
-to:admin.email,
-
-subject:"GODNECHEZ Password Reset",
-
-html:
-
-`
-
-<h2>GODNECHEZ ADMIN</h2>
-
-<p>Your OTP:</p>
-
-<h1>${otp}</h1>
-
-<p>Expires in 10 minutes</p>
-
-`
-
-});
-
-
-
-
-
-res.json({
-
-success:true,
-
-message:"OTP sent"
-
-});
-
-
-
-}
-
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
+  }
 );
-
-
-
-
-
-
-
-
-
-
 
 // VERIFY OTP
 
-
 app.post(
+  "/api/admin/verify-otp",
+  async (req, res) => {
 
-"/api/admin/verify-otp",
+    const admin =
+    await Admin.findOne({
 
-async(req,res)=>{
+      email: req.body.email,
 
+      otp: req.body.otp,
 
-const admin = await Admin.findOne({
+      otpExpiry: {
 
-email:req.body.email,
+        $gt: Date.now()
 
-otp:req.body.otp,
+      }
 
-otpExpiry:{
+    });
 
-$gt:Date.now()
+    if (!admin) {
 
-}
+      return res.status(400).json({
 
-});
+        message:
+        "Invalid or expired OTP"
 
+      });
 
+    }
 
+    res.json({
 
+      success: true,
+      message: "OTP verified"
 
-if(!admin){
+    });
 
-return res.status(400).json({
-
-message:"Invalid or expired OTP"
-
-});
-
-}
-
-
-
-
-
-res.json({
-
-success:true,
-
-message:"OTP verified"
-
-});
-
-
-}
-
+  }
 );
-
-
-
-
-
-
-
-
-
-
-
 
 // RESET PASSWORD
 
-
 app.post(
+  "/api/admin/reset-password",
+  async (req, res) => {
 
-"/api/admin/reset-password",
+    const admin =
+    await Admin.findOne({
 
-async(req,res)=>{
+      email: req.body.email
 
+    });
 
-const admin = await Admin.findOne({
+    if (!admin) {
 
-email:req.body.email
+      return res.status(404).json({
 
-});
+        message:
+        "Admin not found"
 
+      });
 
+    }
 
+    admin.password =
+    await bcrypt.hash(
 
+      req.body.password,
+      10
 
-if(!admin){
+    );
 
-return res.status(404).json({
+    admin.otp = null;
+    admin.otpExpiry = null;
 
-message:"Admin not found"
+    await admin.save();
 
-});
+    res.json({
 
-}
+      success: true,
+      message: "Password updated"
 
+    });
 
-
-
-
-admin.password = await bcrypt.hash(
-
-req.body.password,
-
-10
-
-);
-
-
-
-
-
-admin.otp=null;
-
-
-admin.otpExpiry=null;
-
-
-
-
-
-await admin.save();
-
-
-
-
-
-res.json({
-
-success:true,
-
-message:"Password updated"
-
-});
-
-
-}
-
+  }
 );
 
 /*
@@ -957,73 +673,52 @@ STATS
 =====================
 */
 
-
 app.get(
+  "/api/stats",
+  protect,
+  async (req, res) => {
 
-"/api/stats",
+    try {
 
-protect,
+      const designs =
+      await Design.countDocuments();
 
-async(req,res)=>{
+      const team =
+      await Team.countDocuments();
 
+      const categories =
+      await Design.distinct(
+        "category"
+      );
 
-try{
+      res.json({
 
+        success: true,
 
-const designs = await Design.countDocuments();
+        designs,
 
+        team,
 
-const team = await Team.countDocuments();
+        categories:
+        categories.length
 
+      });
 
+    }
 
-const categories = await Design.distinct(
+    catch (err) {
 
-"category"
+      res.status(500).json({
 
+        message:
+        err.message
+
+      });
+
+    }
+
+  }
 );
-
-
-
-
-
-res.json({
-
-success:true,
-
-designs,
-
-team,
-
-categories:categories.length
-
-});
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -1031,206 +726,126 @@ DESIGNS
 =====================
 */
 
-
 // UPLOAD DESIGN
 
-
 app.post(
+  "/api/designs",
+  protect,
+  upload.single("image"),
+  async (req, res) => {
 
-"/api/designs",
+    try {
 
-protect,
+      if (!req.file) {
 
-upload.single("image"),
+        return res.status(400).json({
 
-async(req,res)=>{
+          message: "Image required"
 
+        });
 
-try{
+      }
 
+      const design = new Design({
 
-if(!req.file){
+        title: req.body.title,
 
-return res.status(400).json({
+        category: req.body.category,
 
-message:"Image required"
+        description: req.body.description,
 
-});
+        image: req.file.path
 
-}
+      });
 
+      await design.save();
 
+      res.json({
 
+        success: true,
 
+        data: design
 
-const design = new Design({
+      });
 
-title:req.body.title,
+    }
 
-category:req.body.category,
+    catch (err) {
 
-description:req.body.description,
+      console.log(err);
 
-image:req.file.path
+      res.status(500).json({
 
-});
+        message: err.message
 
+      });
 
+    }
 
-
-
-await design.save();
-
-
-
-
-
-res.json({
-
-success:true,
-
-data:design
-
-});
-
-
-
-}
-
-catch(err){
-
-console.log(err);
-
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
+  }
 );
-
-
-
-
-
-
-
-
-
-
 
 // GET DESIGNS
 
-
 app.get(
+  "/api/designs",
+  async (req, res) => {
 
-"/api/designs",
+    const designs =
+    await Design.find()
 
-async(req,res)=>{
+    .sort({
 
+      createdAt: -1
 
-const designs = await Design.find()
+    });
 
-.sort({
+    res.json({
 
-createdAt:-1
+      success: true,
 
-});
+      data: designs
 
+    });
 
-
-
-
-res.json({
-
-success:true,
-
-data:designs
-
-});
-
-
-}
-
+  }
 );
-
-
-
-
-
-
-
-
-
-
-
 
 // DELETE DESIGN
 
-
 app.delete(
+  "/api/designs/:id",
+  protect,
+  async (req, res) => {
 
-"/api/designs/:id",
+    try {
 
-protect,
+      await Design.findByIdAndDelete(
 
-async(req,res)=>{
+        req.params.id
 
+      );
 
-try{
+      res.json({
 
+        success: true
 
-await Design.findByIdAndDelete(
+      });
 
-req.params.id
+    }
 
+    catch (err) {
+
+      res.status(500).json({
+
+        message: err.message
+
+      });
+
+    }
+
+  }
 );
-
-
-
-
-
-res.json({
-
-success:true
-
-});
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -1238,124 +853,100 @@ TEAM
 =====================
 */
 
-
 // ADD TEAM MEMBER
 
-
 app.post(
+  "/api/team",
+  protect,
+  upload.single("image"),
+  async (req, res) => {
 
-"/api/team",
+    try {
 
-protect,
+      const member =
+      new Team({
 
-upload.single("image"),
+        name:
+        req.body.name,
 
-async(req,res)=>{
+        position:
+        req.body.position,
 
+        category:
+        req.body.category || "staff",
 
-try{
+        bio:
+        req.body.bio,
 
+        image:
+        req.file
+        ? req.file.path
+        : ""
 
-const member = new Team({
-
-name:req.body.name,
-
-position:req.body.position,
-
-category:req.body.category || "staff",
-
-bio:req.body.bio,
-
-image:req.file ? req.file.path : ""
-
-});
-
-
-
-
-
-await member.save();
+      });
 
 
+      await member.save();
 
 
+      res.json({
 
-res.json({
+        success:true,
 
-success:true,
+        data:member
 
-data:member
-
-});
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
+      });
 
 
-}
+    }
 
+    catch(err){
+
+      res.status(500).json({
+
+        message:
+        err.message
+
+      });
+
+    }
+
+
+  }
 );
-
-
-
-
-
-
-
 
 
 
 
 // GET TEAM
 
-
 app.get(
-
-"/api/team",
-
-async(req,res)=>{
+  "/api/team",
+  async(req,res)=>{
 
 
-const team = await Team.find()
+    const team =
+    await Team.find()
 
-.sort({
+    .sort({
 
-createdAt:-1
+      createdAt:-1
 
-});
-
+    });
 
 
 
+    res.json({
 
-res.json({
+      success:true,
 
-success:true,
+      data:team
 
-data:team
-
-});
+    });
 
 
-}
-
+  }
 );
-
-
-
-
-
-
 
 
 
@@ -1366,148 +957,175 @@ data:team
 
 
 app.put(
-
-"/api/team/:id",
-
-protect,
-
-upload.single("image"),
-
-async(req,res)=>{
+  "/api/team/:id",
+  protect,
+  upload.single("image"),
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-const update = {
+      const update = {
 
 
-name:req.body.name,
-
-position:req.body.position,
-
-category:req.body.category,
-
-bio:req.body.bio
-
-};
+        name:
+        req.body.name,
 
 
+        position:
+        req.body.position,
 
 
+        category:
+        req.body.category,
 
-if(req.file){
 
-update.image=req.file.path;
+        bio:
+        req.body.bio
 
-}
+
+      };
 
 
 
 
+      if(req.file){
 
-const member = await Team.findByIdAndUpdate(
 
-req.params.id,
+        update.image =
+        req.file.path;
 
-update,
 
-{
+      }
 
-new:true
 
-}
 
+
+      const member =
+      await Team.findByIdAndUpdate(
+
+
+        req.params.id,
+
+
+        update,
+
+
+        {
+
+          new:true
+
+        }
+
+
+      );
+
+
+
+
+
+      res.json({
+
+
+        success:true,
+
+
+        data:member
+
+
+      });
+
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+      });
+
+
+    }
+
+
+  }
 );
 
 
 
 
 
-res.json({
-
-success:true,
-
-data:member
-
-});
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
 
 
 
 
-
-
-
-
-
-
-
-// DELETE TEAM
+// DELETE TEAM MEMBER
 
 
 app.delete(
-
-"/api/team/:id",
-
-protect,
-
-async(req,res)=>{
+  "/api/team/:id",
+  protect,
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-await Team.findByIdAndDelete(
+      await Team.findByIdAndDelete(
 
-req.params.id
 
+        req.params.id
+
+
+      );
+
+
+
+
+      res.json({
+
+
+        success:true
+
+
+      });
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+      });
+
+
+    }
+
+
+  }
 );
 
-
-
-
-
-res.json({
-
-success:true
-
-});
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
 
 /*
 =====================
@@ -1519,59 +1137,74 @@ FAQ
 // ADD FAQ
 
 app.post(
-
-"/api/faqs",
-
-protect,
-
-async(req,res)=>{
+  "/api/faqs",
+  protect,
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-const faq = new FAQ({
+      const faq =
+      new FAQ({
 
-question:req.body.question,
-
-answer:req.body.answer
-
-});
+        question:
+        req.body.question,
 
 
+        answer:
+        req.body.answer
 
 
-
-await faq.save();
+      });
 
 
 
 
 
-res.json({
-
-success:true,
-
-data:faq
-
-});
+      await faq.save();
 
 
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
 
 
-}
 
+      res.json({
+
+
+        success:true,
+
+
+        data:faq
+
+
+
+      });
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+
+      });
+
+
+
+    }
+
+
+  }
 );
 
 
@@ -1586,38 +1219,42 @@ message:err.message
 
 
 app.get(
-
-"/api/faqs",
-
-async(req,res)=>{
+  "/api/faqs",
+  async(req,res)=>{
 
 
-const faqs = await FAQ.find()
-
-.sort({
-
-createdAt:-1
-
-});
+    const faqs =
+    await FAQ.find()
 
 
+    .sort({
+
+
+      createdAt:-1
+
+
+    });
 
 
 
-res.json({
-
-success:true,
-
-data:faqs
-
-});
 
 
-}
+    res.json({
 
+
+      success:true,
+
+
+      data:faqs
+
+
+
+    });
+
+
+
+  }
 );
-
-
 
 
 
@@ -1631,64 +1268,61 @@ data:faqs
 
 
 app.delete(
-
-"/api/faqs/:id",
-
-protect,
-
-async(req,res)=>{
+  "/api/faqs/:id",
+  protect,
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-await FAQ.findByIdAndDelete(
+      await FAQ.findByIdAndDelete(
 
-req.params.id
 
+        req.params.id
+
+
+      );
+
+
+
+
+      res.json({
+
+
+        success:true
+
+
+
+      });
+
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+
+      });
+
+
+    }
+
+
+
+  }
 );
-
-
-
-
-
-res.json({
-
-success:true
-
-});
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -1699,63 +1333,80 @@ TESTIMONIALS
 
 // CLIENT SUBMIT
 
-
 app.post(
-
-"/api/testimonials",
-
-async(req,res)=>{
+  "/api/testimonials",
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-const testimonial = new Testimonial({
-
-name:req.body.name,
-
-message:req.body.message
-
-});
+      const testimonial =
+      new Testimonial({
 
 
+        name:
+        req.body.name,
+
+
+        message:
+        req.body.message
 
 
 
-await testimonial.save();
-
+      });
 
 
 
 
-res.json({
 
-success:true,
-
-message:"Submitted successfully"
-
-});
+      await testimonial.save();
 
 
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
 
 
-}
 
+      res.json({
+
+
+        success:true,
+
+
+        message:
+        "Submitted successfully"
+
+
+
+      });
+
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+
+      });
+
+
+
+    }
+
+
+
+  }
 );
-
-
-
 
 
 
@@ -1769,41 +1420,48 @@ message:err.message
 
 
 app.get(
-
-"/api/testimonials",
-
-async(req,res)=>{
+  "/api/testimonials",
+  async(req,res)=>{
 
 
-const testimonials = await Testimonial.find({
-
-approved:true
-
-})
-
-.sort({
-
-createdAt:-1
-
-});
+    const testimonials =
+    await Testimonial.find({
 
 
+      approved:true
+
+
+    })
+
+
+    .sort({
+
+
+      createdAt:-1
+
+
+    });
 
 
 
-res.json({
-
-success:true,
-
-data:testimonials
-
-});
 
 
-}
+    res.json({
 
+
+      success:true,
+
+
+      data:testimonials
+
+
+
+    });
+
+
+
+  }
 );
-
 
 
 
@@ -1819,39 +1477,43 @@ data:testimonials
 
 
 app.get(
-
-"/api/testimonials/admin",
-
-protect,
-
-async(req,res)=>{
+  "/api/testimonials/admin",
+  protect,
+  async(req,res)=>{
 
 
-const testimonials = await Testimonial.find()
-
-.sort({
-
-createdAt:-1
-
-});
+    const testimonials =
+    await Testimonial.find()
 
 
+    .sort({
+
+
+      createdAt:-1
+
+
+    });
 
 
 
-res.json({
-
-success:true,
-
-data:testimonials
-
-});
 
 
-}
+    res.json({
 
+
+      success:true,
+
+
+      data:testimonials
+
+
+
+    });
+
+
+
+  }
 );
-
 
 
 
@@ -1867,65 +1529,89 @@ data:testimonials
 
 
 app.put(
-
-"/api/testimonials/:id",
-
-protect,
-
-async(req,res)=>{
+  "/api/testimonials/:id",
+  protect,
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-const testimonial = await Testimonial.findByIdAndUpdate(
+      const testimonial =
+      await Testimonial.findByIdAndUpdate(
 
-req.params.id,
 
-{
+        req.params.id,
 
-approved:req.body.approved
 
-},
+        {
 
-{
 
-new:true
+          approved:
+          req.body.approved
 
-}
 
+
+        },
+
+
+        {
+
+
+          new:true
+
+
+
+        }
+
+
+
+      );
+
+
+
+
+
+      res.json({
+
+
+        success:true,
+
+
+        data:testimonial
+
+
+
+      });
+
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+
+      });
+
+
+
+    }
+
+
+
+  }
 );
-
-
-
-
-
-res.json({
-
-success:true,
-
-data:testimonial
-
-});
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
-
 
 
 
@@ -1941,65 +1627,62 @@ message:err.message
 
 
 app.delete(
-
-"/api/testimonials/:id",
-
-protect,
-
-async(req,res)=>{
+  "/api/testimonials/:id",
+  protect,
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-await Testimonial.findByIdAndDelete(
+      await Testimonial.findByIdAndDelete(
 
-req.params.id
 
+        req.params.id
+
+
+      );
+
+
+
+
+      res.json({
+
+
+        success:true
+
+
+
+      });
+
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+
+      });
+
+
+
+    }
+
+
+
+  }
 );
-
-
-
-
-
-res.json({
-
-success:true
-
-});
-
-
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -2010,63 +1693,84 @@ MESSAGES
 
 // SEND MESSAGE
 
-
 app.post(
-
-"/api/messages",
-
-async(req,res)=>{
+  "/api/messages",
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-const message = new Message({
-
-name:req.body.name,
-
-email:req.body.email,
-
-subject:req.body.subject,
-
-message:req.body.message
-
-});
+      const message =
+      new Message({
 
 
+        name:
+        req.body.name,
 
 
+        email:
+        req.body.email,
 
-await message.save();
 
+        subject:
+        req.body.subject,
+
+
+        message:
+        req.body.message
 
 
 
-
-res.json({
-
-success:true
-
-});
+      });
 
 
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
 
 
-}
 
+      await message.save();
+
+
+
+
+
+      res.json({
+
+
+        success:true
+
+
+
+      });
+
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+
+      });
+
+
+
+    }
+
+
+
+  }
 );
-
 
 
 
@@ -2082,39 +1786,43 @@ message:err.message
 
 
 app.get(
-
-"/api/messages",
-
-protect,
-
-async(req,res)=>{
+  "/api/messages",
+  protect,
+  async(req,res)=>{
 
 
-const messages = await Message.find()
-
-.sort({
-
-createdAt:-1
-
-});
+    const messages =
+    await Message.find()
 
 
+    .sort({
+
+
+      createdAt:-1
+
+
+    });
 
 
 
-res.json({
-
-success:true,
-
-data:messages
-
-});
 
 
-}
+    res.json({
 
+
+      success:true,
+
+
+      data:messages
+
+
+
+    });
+
+
+
+  }
 );
-
 
 
 
@@ -2130,50 +1838,69 @@ data:messages
 
 
 app.delete(
-
-"/api/messages/:id",
-
-protect,
-
-async(req,res)=>{
+  "/api/messages/:id",
+  protect,
+  async(req,res)=>{
 
 
-try{
+    try{
 
 
-await Message.findByIdAndDelete(
+      await Message.findByIdAndDelete(
 
-req.params.id
 
+        req.params.id
+
+
+      );
+
+
+
+
+      res.json({
+
+
+        success:true
+
+
+
+      });
+
+
+
+
+
+    }
+
+
+    catch(err){
+
+
+      res.status(500).json({
+
+
+        message:
+        err.message
+
+
+
+      });
+
+
+
+    }
+
+
+
+  }
 );
 
 
 
 
 
-res.json({
-
-success:true
-
-});
 
 
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
-
-
-}
-
-);
 
 /*
 =====================
@@ -2182,23 +1909,39 @@ ERROR HANDLING
 */
 
 
-app.use((err,req,res,next)=>{
+app.use(
+  (err,req,res,next)=>{
 
 
-console.log("SERVER ERROR:",err);
+    console.log(
+
+      "SERVER ERROR:",
+      err
+
+    );
 
 
 
-res.status(500).json({
-
-success:false,
-
-message:err.message || "Server error"
-
-});
+    res.status(500).json({
 
 
-});
+      success:false,
+
+
+      message:
+
+      err.message ||
+
+      "Server error"
+
+
+
+    });
+
+
+
+  }
+);
 
 
 
@@ -2215,14 +1958,17 @@ SERVER START
 */
 
 
-app.listen(PORT,()=>{
+app.listen(
+  PORT,
+  ()=>{
 
 
-console.log(
+    console.log(
 
-`Server running on port ${PORT}`
+      `Server running on port ${PORT}`
 
+    );
+
+
+  }
 );
-
-
-});

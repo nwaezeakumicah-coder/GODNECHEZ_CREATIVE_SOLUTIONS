@@ -9,9 +9,7 @@
 
 <title>About Us | GODNECHEZ CREATIVE SOLUTIONS</title>
 
-
 <style>
-
 
 :root{
 
@@ -25,19 +23,14 @@
 }
 
 
-
 *{
 
 margin:0;
-
 padding:0;
-
 box-sizing:border-box;
-
 font-family:Arial,sans-serif;
 
 }
-
 
 
 body{
@@ -50,10 +43,7 @@ color:var(--navy);
 
 
 
-
-
 /* NAVBAR */
-
 
 header{
 
@@ -93,10 +83,7 @@ align-items:center;
 
 
 
-
-
 /* BRAND */
-
 
 .brand{
 
@@ -109,7 +96,6 @@ gap:12px;
 }
 
 
-
 .brand img{
 
 width:45px;
@@ -119,7 +105,6 @@ height:45px;
 object-fit:contain;
 
 }
-
 
 
 .logo-text{
@@ -139,7 +124,6 @@ color:var(--white);
 }
 
 
-
 .logo-text span{
 
 font-size:11px;
@@ -152,10 +136,7 @@ color:var(--yellow);
 
 
 
-
-
-/* NAV LINKS */
-
+/* NAV */
 
 .nav{
 
@@ -166,7 +147,6 @@ align-items:center;
 gap:22px;
 
 }
-
 
 
 .nav a{
@@ -182,13 +162,11 @@ font-size:14px;
 }
 
 
-
 .nav a:hover{
 
 color:var(--yellow);
 
 }
-
 
 
 
@@ -206,17 +184,6 @@ border-radius:30px;
 
 
 
-.admin-link:hover{
-
-background:var(--red);
-
-color:white!important;
-
-}
-
-
-
-
 .menu{
 
 display:none;
@@ -228,7 +195,6 @@ cursor:pointer;
 color:white;
 
 }
-
 
 
 
@@ -256,13 +222,11 @@ color:white;
 }
 
 
-
 .hero h1{
 
 font-size:3.5rem;
 
 }
-
 
 
 .hero span{
@@ -272,21 +236,15 @@ color:var(--yellow);
 }
 
 
-
 .hero p{
 
 margin-top:20px;
-
-color:white;
 
 font-size:18px;
 
 opacity:.9;
 
 }
-
-
-
 
 section{
 
@@ -300,8 +258,6 @@ padding:70px 20px;
 
 
 
-
-
 .title{
 
 text-align:center;
@@ -309,8 +265,6 @@ text-align:center;
 margin-bottom:40px;
 
 }
-
-
 
 
 .title span{
@@ -370,6 +324,8 @@ line-height:1.7;
 
 }
 
+
+
 /* MISSION */
 
 
@@ -416,7 +372,6 @@ color:#555;
 line-height:1.6;
 
 }
-
 
 
 
@@ -532,8 +487,6 @@ line-height:1.6;
 
 
 
-
-
 /* CTA */
 
 
@@ -541,21 +494,13 @@ line-height:1.6;
 
 background:var(--navy);
 
-color:var(--white);
+color:white;
 
 padding:45px;
 
 border-radius:25px;
 
 text-align:center;
-
-}
-
-
-
-.cta h2{
-
-margin-bottom:15px;
 
 }
 
@@ -583,18 +528,6 @@ font-weight:bold;
 
 
 
-.cta a:hover{
-
-background:var(--red);
-
-color:white;
-
-}
-
-
-
-
-
 footer{
 
 background:var(--navy);
@@ -606,7 +539,6 @@ padding:40px;
 text-align:center;
 
 }
-
 
 
 
@@ -672,10 +604,7 @@ font-size:2.5rem;
 }
 
 
-
 }
-
-
 
 </style>
 
@@ -693,7 +622,7 @@ font-size:2.5rem;
 
 <div class="brand">
 
-<img src="logo.png" alt="GODNECHEZ Logo">
+<img src="images/Untitled-1.png" alt="GODNECHEZ Logo">
 
 
 <div class="logo-text">
@@ -710,8 +639,6 @@ CREATIVE SOLUTIONS
 
 
 </div>
-
-
 
 
 <div class="nav" id="nav">
@@ -752,7 +679,6 @@ Contact
 </a>
 
 
-
 <a href="admin-login.html" class="admin-link">
 
 👤 Admin Login
@@ -760,11 +686,7 @@ Contact
 </a>
 
 
-
 </div>
-
-
-
 
 
 <div class="menu" onclick="toggleMenu()">
@@ -774,11 +696,9 @@ Contact
 </div>
 
 
-
 </div>
 
 </header>
-
 
 <section class="hero">
 
@@ -804,6 +724,9 @@ Creative solutions that build memorable brands.
 
 
 </section>
+
+
+
 
 <section>
 
@@ -857,9 +780,6 @@ We combine creativity, strategy and modern design techniques to create solutions
 
 
 </section>
-
-
-
 
 
 
@@ -955,10 +875,6 @@ Creativity, quality, consistency and customer satisfaction.
 
 
 
-
-
-
-
 <section>
 
 
@@ -973,13 +889,10 @@ Leadership & Team
 </div>
 
 
-
 <div class="team" id="team"></div>
 
 
 </section>
-
-
 
 
 
@@ -1014,8 +927,6 @@ Contact Us
 
 
 
-
-
 <footer>
 
 
@@ -1033,7 +944,7 @@ Contact Us
 <script>
 
 
-const API="https://godnechez-creative-solutions.onrender.com/";
+const API="https://godnechez-creative-solutions.onrender.com";
 
 
 
@@ -1059,19 +970,19 @@ async function loadTeam(){
 try{
 
 
-const response=await fetch(
+const response = await fetch(
 
-API+"/api/team"
+API + "/api/team"
 
 );
 
 
 
-const result=await response.json();
+const result = await response.json();
 
 
 
-const team=document.getElementById("team");
+const team = document.getElementById("team");
 
 
 
@@ -1114,6 +1025,7 @@ hierarchy[b.category] || 99
 
 
 
+
 result.data.forEach(member=>{
 
 
@@ -1123,7 +1035,7 @@ team.innerHTML += `
 <div class="member">
 
 
-<img src="${API}/uploads/${member.image}">
+<img src="${member.image}">
 
 
 

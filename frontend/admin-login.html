@@ -133,36 +133,59 @@ color:black;
 
 <body>
 
+
 <div class="login-box">
 
+
 <div class="logo">
+
 GODNECHEZ <span>ADMIN</span>
+
 </div>
 
+
 <p class="subtitle">
+
 Secure administrator access
+
 </p>
 
-<input
-id="username"
-placeholder="Username"
-autocomplete="username"
->
 
 <input
-id="password"
-type="password"
-placeholder="Password"
-autocomplete="current-password"
+
+id="username"
+
+placeholder="Username"
+
+autocomplete="username"
+
 >
+
+
+<input
+
+id="password"
+
+type="password"
+
+placeholder="Password"
+
+autocomplete="current-password"
+
+>
+
 
 <button id="loginBtn" onclick="login()">
+
 LOGIN
+
 </button>
 
 
 <a class="forgot" href="forgot-password.html">
+
 Forgot Password?
+
 </a>
 
 
@@ -170,17 +193,22 @@ Forgot Password?
 
 
 <a class="back" href="index.html">
+
 ← Back to Website
+
 </a>
+
 
 </div>
 
-
 <script>
 
-const API="https://godnechez-creative-solutions.onrender.com/";
+
+const API="https://godnechez-creative-solutions.onrender.com";
+
 
 const token=localStorage.getItem("adminToken");
+
 
 if(token){
 
@@ -189,21 +217,33 @@ window.location.replace("admin.html");
 }
 
 
+
+
+
 async function login(){
 
-const user=username.value.trim();
 
-const pass=password.value.trim();
+const user=document.getElementById("username").value.trim();
+
+
+const pass=document.getElementById("password").value.trim();
+
 
 
 if(!user || !pass){
 
-message.innerHTML=
+
+document.getElementById("message").innerHTML=
+
 "Please enter username and password";
+
 
 return;
 
 }
+
+
+
 
 
 const btn=document.getElementById("loginBtn");
@@ -211,13 +251,18 @@ const btn=document.getElementById("loginBtn");
 
 btn.disabled=true;
 
+
 btn.innerHTML="Logging in...";
 
 
-message.innerHTML="";
+document.getElementById("message").innerHTML="";
+
+
+
 
 
 try{
+
 
 
 const res=await fetch(
@@ -226,21 +271,30 @@ API+"/api/admin/login",
 
 {
 
+
 method:"POST",
+
 
 headers:{
 
+
 "Content-Type":"application/json"
+
 
 },
 
+
 body:JSON.stringify({
+
 
 username:user,
 
+
 password:pass
 
+
 })
+
 
 }
 
@@ -248,11 +302,16 @@ password:pass
 
 
 
+
+
 const result=await res.json();
 
 
 
+
+
 if(result.success){
+
 
 
 localStorage.setItem(
@@ -264,6 +323,7 @@ result.token
 );
 
 
+
 window.location.replace(
 
 "admin.html"
@@ -271,12 +331,13 @@ window.location.replace(
 );
 
 
+
 }
 
 else{
 
 
-message.innerHTML=
+document.getElementById("message").innerHTML=
 
 result.message || "Login failed";
 
@@ -284,13 +345,16 @@ result.message || "Login failed";
 }
 
 
+
 }
+
 
 
 catch(error){
 
 
-message.innerHTML=
+
+document.getElementById("message").innerHTML=
 
 "Unable to connect to server";
 
@@ -299,7 +363,10 @@ message.innerHTML=
 
 
 
+
+
 btn.disabled=false;
+
 
 btn.innerHTML="LOGIN";
 
@@ -308,17 +375,23 @@ btn.innerHTML="LOGIN";
 
 
 
+
+
+
 document.addEventListener("keypress",(e)=>{
 
 
 if(e.key==="Enter"){
 
+
 login();
+
 
 }
 
 
 });
+
 
 
 </script>

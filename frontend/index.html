@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>GODNECHEZ CREATIVE SOLUTIONS</title>
@@ -23,7 +24,6 @@
 }
 
 
-
 *{
 
 margin:0;
@@ -34,14 +34,12 @@ font-family:Arial,sans-serif;
 }
 
 
-
 body{
 
 background:var(--blue);
 color:var(--white);
 
 }
-
 
 
 
@@ -80,6 +78,7 @@ justify-content:space-between;
 align-items:center;
 
 }
+
 
 
 
@@ -140,6 +139,7 @@ color:var(--yellow);
 
 
 
+
 /* NAV LINKS */
 
 
@@ -178,6 +178,7 @@ color:var(--red);
 
 
 
+
 .admin-link{
 
 background:var(--yellow);
@@ -192,7 +193,6 @@ border-radius:30px;
 
 
 
-
 .admin-link:hover{
 
 background:var(--white);
@@ -200,6 +200,7 @@ background:var(--white);
 color:var(--red);
 
 }
+
 
 
 
@@ -213,6 +214,8 @@ font-size:28px;
 cursor:pointer;
 
 }
+
+
 
 /* HERO */
 
@@ -281,6 +284,7 @@ line-height:1.7;
 
 
 
+
 .btn{
 
 display:inline-block;
@@ -311,11 +315,6 @@ background:var(--white);
 color:var(--red);
 
 }
-
-
-
-
-
 
 /* SECTIONS */
 
@@ -634,6 +633,7 @@ font-size:2.5rem;
 }
 
 
+
 .brand img{
 
 width:40px;
@@ -641,6 +641,7 @@ width:40px;
 height:40px;
 
 }
+
 
 
 .logo-text{
@@ -657,21 +658,26 @@ font-size:16px;
 
 </head>
 
+
 <body>
 
-    <header>
+
+<header>
+
 
 <div class="navbar">
 
 
 <div class="brand">
 
-<img src="logo.png" alt="GODNECHEZ Logo">
+<img src="images/Untitled-1.png" alt="GODNECHEZ Logo">
 
 
 <div class="logo-text">
 
+
 GODNECHEZ
+
 
 <span>
 
@@ -679,10 +685,12 @@ CREATIVE SOLUTIONS
 
 </span>
 
+
 </div>
 
 
 </div>
+
 
 
 
@@ -739,7 +747,6 @@ Contact
 
 
 
-
 <div class="menu" onclick="toggleMenu()">
 
 ☰
@@ -751,11 +758,6 @@ Contact
 </div>
 
 </header>
-
-
-
-
-
 
 <section class="hero">
 
@@ -800,7 +802,6 @@ Explore Our Work
 
 
 </section>
-
 
 
 
@@ -969,6 +970,9 @@ Flyers, banners, DTF and promotional designs.
 
 
 </section>
+
+
+
 
 <section>
 
@@ -1152,7 +1156,7 @@ Contact Us
 <script>
 
 
-const API="https://godnechez-creative-solutions.onrender.com/";
+const API="https://godnechez-creative-solutions.onrender.com";
 
 
 
@@ -1197,7 +1201,9 @@ const data = await res.json();
 
 
 const box=document.getElementById(
+
 "featured"
+
 );
 
 
@@ -1221,9 +1227,9 @@ box.innerHTML += `
 
 <img
 
-src="${API}/uploads/${item.image}"
+src="${item.image}"
 
-alt="${item.title}"
+alt="${item.title || 'Design'}"
 
 >
 

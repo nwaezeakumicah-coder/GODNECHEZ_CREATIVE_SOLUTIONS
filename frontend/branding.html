@@ -22,8 +22,6 @@
 
 }
 
-
-
 *{
 
 margin:0;
@@ -33,8 +31,6 @@ font-family:Arial,sans-serif;
 
 }
 
-
-
 body{
 
 background:var(--white);
@@ -43,157 +39,99 @@ overflow-x:hidden;
 
 }
 
-
-
-
 /* NAVBAR */
-
 
 header{
 
 position:fixed;
 top:0;
 width:100%;
-
 background:rgba(255,255,255,.95);
-
 backdrop-filter:blur(15px);
-
 border-bottom:1px solid #eee;
-
 z-index:1000;
-
 animation:navDrop .8s ease;
 
 }
 
-
-
 @keyframes navDrop{
 
 from{
-
 transform:translateY(-100%);
-
 }
 
 to{
-
 transform:translateY(0);
-
 }
 
 }
-
-
-
 
 .navbar{
 
 max-width:1200px;
-
 margin:auto;
-
 padding:15px 20px;
-
 display:flex;
-
 justify-content:space-between;
-
 align-items:center;
 
 }
 
-
-
 /* BRAND */
-
 
 .brand{
 
 display:flex;
-
 align-items:center;
-
 gap:12px;
 
 }
 
-
-
 .brand img{
 
 width:45px;
-
 height:45px;
-
 object-fit:contain;
 
 }
 
-
-
 .logo-text{
 
 display:flex;
-
 flex-direction:column;
-
 font-size:20px;
-
 font-weight:900;
-
 line-height:1;
 
 }
 
-
-
 .logo-text span{
 
 font-size:11px;
-
 letter-spacing:1px;
-
 color:var(--blue);
 
 }
 
-
-
-
-
-
 /* NAV */
-
 
 .nav{
 
 display:flex;
-
 align-items:center;
-
 gap:22px;
 
 }
 
-
-
 .nav a{
 
 text-decoration:none;
-
 color:#111;
-
 font-weight:bold;
-
 font-size:14px;
-
 transition:.3s;
 
 }
-
-
 
 .nav a:hover{
 
@@ -201,90 +139,52 @@ color:var(--red);
 
 }
 
-
-
-
-
 .admin-link{
 
 background:var(--yellow);
-
 padding:10px 18px;
-
 border-radius:30px;
-
 color:black !important;
 
 }
 
-
-
-
-
 .menu{
 
 display:none;
-
 font-size:28px;
-
 cursor:pointer;
 
 }
 
-
-
-
-
-
 /* HERO */
-
 
 .hero{
 
 text-align:center;
-
 padding:150px 20px 50px;
-
 background:
-
 radial-gradient(
-
 circle at top right,
-
 rgba(255,212,0,.2),
-
 transparent 35%
-
 );
-
 animation:fadeUp 1s ease;
 
 }
 
-
-
 @keyframes fadeUp{
 
 from{
-
 opacity:0;
-
 transform:translateY(50px);
-
 }
 
 to{
-
 opacity:1;
-
 transform:translateY(0);
-
 }
 
 }
-
-
-
 
 .hero h1{
 
@@ -292,383 +192,17 @@ font-size:3rem;
 
 }
 
-
-
 .hero span{
 
 color:var(--blue);
 
 }
 
-
-
 .hero p{
 
 margin-top:15px;
-
 color:var(--gray);
-
 font-size:18px;
-
-}
-
-
-
-
-/* CATEGORY */
-
-
-.categories{
-
-text-align:center;
-
-padding:20px;
-
-}
-
-
-
-.categories a{
-
-display:inline-block;
-
-padding:12px 18px;
-
-margin:6px;
-
-background:#eee;
-
-border-radius:25px;
-
-text-decoration:none;
-
-font-weight:bold;
-
-color:black;
-
-transition:.3s;
-
-}
-
-
-
-.categories a:hover{
-
-background:var(--yellow);
-
-transform:translateY(-3px);
-
-}
-
-
-
-.active{
-
-background:var(--blue)!important;
-
-color:white!important;
-
-}
-
-/* GALLERY */
-
-
-.gallery{
-
-max-width:1200px;
-
-margin:auto;
-
-padding:30px 20px;
-
-display:grid;
-
-grid-template-columns:
-
-repeat(auto-fit,minmax(240px,1fr));
-
-gap:25px;
-
-}
-
-
-
-
-.card{
-
-background:#f5f5f5;
-
-border-radius:18px;
-
-overflow:hidden;
-
-cursor:pointer;
-
-transition:.4s;
-
-box-shadow:
-
-0 10px 25px rgba(0,0,0,.08);
-
-animation:cardShow .7s ease;
-
-}
-
-
-
-
-@keyframes cardShow{
-
-from{
-
-opacity:0;
-
-transform:scale(.9);
-
-}
-
-to{
-
-opacity:1;
-
-transform:scale(1);
-
-}
-
-}
-
-
-
-
-
-.card:hover{
-
-transform:translateY(-8px);
-
-box-shadow:
-
-0 20px 40px rgba(0,0,0,.15);
-
-}
-
-
-
-
-
-.card img{
-
-width:100%;
-
-aspect-ratio:1/1;
-
-object-fit:cover;
-
-display:block;
-
-}
-
-
-
-
-
-.info{
-
-padding:15px;
-
-}
-
-
-
-.info h3{
-
-margin-bottom:6px;
-
-}
-
-
-
-.info small{
-
-color:var(--gray);
-
-}
-
-
-
-
-
-
-/* LOAD MORE */
-
-
-.load{
-
-text-align:center;
-
-padding:40px;
-
-}
-
-
-
-.load button{
-
-padding:14px 30px;
-
-border:none;
-
-background:var(--yellow);
-
-border-radius:12px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-
-
-.load button:hover{
-
-background:var(--blue);
-
-color:white;
-
-transform:scale(1.05);
-
-}
-
-
-
-
-
-
-/* MODAL */
-
-
-.modal{
-
-position:fixed;
-
-inset:0;
-
-background:rgba(6,27,58,.95);
-
-display:none;
-
-align-items:center;
-
-justify-content:center;
-
-z-index:2000;
-
-padding:20px;
-
-}
-
-
-
-.modal img{
-
-max-width:95%;
-
-max-height:95%;
-
-border-radius:15px;
-
-border:5px solid var(--yellow);
-
-}
-
-
-
-
-
-
-
-/* FOOTER */
-
-
-footer{
-
-background:var(--dark);
-
-color:white;
-
-padding:40px;
-
-text-align:center;
-
-margin-top:60px;
-
-}
-
-
-
-
-
-
-
-/* MOBILE */
-
-
-@media(max-width:768px){
-
-
-.nav{
-
-position:fixed;
-
-top:70px;
-
-right:-100%;
-
-width:240px;
-
-height:100vh;
-
-background:white;
-
-flex-direction:column;
-
-padding:30px;
-
-gap:20px;
-
-transition:.4s;
-
-box-shadow:-5px 0 20px rgba(0,0,0,.1);
-
-}
-
-
-
-.nav.show{
-
-right:0;
-
-}
-
-
-
-.menu{
-
-display:block;
-
-}
-
-
-
-.hero h1{
-
-font-size:2.2rem;
-
-}
-
-
 
 }
 
@@ -676,238 +210,109 @@ font-size:2.2rem;
 
 </head>
 
-
 <body>
-
 
 <header>
 
-
 <div class="navbar">
-
-
 
 <div class="brand">
 
-
-<img src="logo.png" alt="GODNECHEZ Logo">
-
-
+<img src="images/Untitled-1.png" alt="GODNECHEZ Logo">
 
 <div class="logo-text">
 
-
 GODNECHEZ
 
-
 <span>
-
 CREATIVE SOLUTIONS
-
 </span>
 
-
 </div>
 
-
 </div>
-
-
-
-
 
 <div class="nav" id="nav">
 
+<a href="index.html">Home</a>
 
+<a href="portfolio.html">Portfolio</a>
 
-<a href="index.html">
+<a href="services.html">Services</a>
 
-Home
+<a href="about.html">About</a>
 
-</a>
+<a href="faq.html">FAQ</a>
 
+<a href="testimonials.html">Testimonials</a>
 
-
-<a href="portfolio.html">
-
-Portfolio
-
-</a>
-
-
-
-<a href="services.html">
-
-Services
-
-</a>
-
-
-
-<a href="about.html">
-
-About
-
-</a>
-
-
-
-<a href="faq.html">
-
-FAQ
-
-</a>
-
-
-
-<a href="testimonials.html">
-
-Testimonials
-
-</a>
-
-
-
-<a href="contact.html">
-
-Contact
-
-</a>
-
-
-
+<a href="contact.html">Contact</a>
 
 <a href="admin-login.html" class="admin-link">
-
 👤 Admin Login
-
 </a>
 
-
-
 </div>
-
-
-
-
 
 <div class="menu" onclick="toggleMenu()">
-
 ☰
-
 </div>
 
-
-
 </div>
-
 
 </header>
 
-
-
-
-
-
 <section class="hero">
-
 
 <h1>
 
 Branding
 
 <span>
-
 Gallery
-
 </span>
 
 </h1>
 
-
-
 <p>
-
 Explore our branding and identity design collection.
-
 </p>
 
-
-
 </section>
-
-
-
-
 
 <div class="categories">
 
-
 <a href="portfolio.html">
-
 All
-
 </a>
-
-
 
 <a href="logos.html">
-
 Logos
-
 </a>
-
-
 
 <a href="flyers.html">
-
 Flyers
-
 </a>
-
-
 
 <a href="branding.html" class="active">
-
 Branding
-
 </a>
-
-
 
 <a href="dtf.html">
-
 DTF
-
 </a>
-
-
 
 <a href="banners.html">
-
 Banners
-
 </a>
-
 
 </div>
 
-
-
-
-
-
 <section class="gallery" id="gallery">
-
 
 </section>
 
-
-
-
-
 <div class="load">
-
 
 <button onclick="loadMore()">
 
@@ -915,66 +320,38 @@ Load More Branding Designs
 
 </button>
 
-
 </div>
-
-
-
-
 
 <div class="modal" id="modal" onclick="closeModal()">
 
-
-
 <img id="modalImage">
-
-
 
 </div>
 
-
-
-
 <footer>
 
-
 © 2026 GODNECHEZ CREATIVE SOLUTIONS
-
 
 </footer>
 
 <script>
 
-
 const API =
-"https://godnechez-creative-solutions.onrender.com/";
-
-
+"https://godnechez-creative-solutions.onrender.com";
 
 let branding = [];
 
 let visible = 12;
 
-
-
-
-
-
 async function getBranding(){
-
 
 try{
 
-
-const res = await fetch(API);
-
-
+const res = await fetch(
+API + "/api/designs"
+);
 
 const data = await res.json();
-
-
-
-
 
 branding = data.data.filter(item =>
 
@@ -982,245 +359,97 @@ branding = data.data.filter(item =>
 
 );
 
-
-
-
-
 display();
 
-
-
 }
-
 
 catch(err){
 
-
 console.log(err);
 
-
 }
 
-
 }
-
-
-
-
-
-
-
-
 
 function display(){
 
-
-
 const gallery =
-
 document.getElementById("gallery");
-
-
 
 gallery.innerHTML = "";
 
-
-
-
-
 branding
-
-.slice(0,visible)
-
-.forEach(item=>{
-
-
+.slice(0, visible)
+.forEach(item => {
 
 gallery.innerHTML += `
 
-
-
 <div class="card"
-
 onclick="openModal('${item.image}')">
 
-
-
-
-
-<img 
-
-src="http://localhost:5000/uploads/${item.image}"
-
-alt="${item.title}"
-
->
-
-
-
-
+<img
+src="${item.image}"
+alt="${item.title || 'Branding Design'}">
 
 <div class="info">
 
-
-
-
-
 <h3>
-
 ${item.title || "Branding Design"}
-
 </h3>
 
-
-
-
-
 <small>
-
 ${item.category || "Branding"}
-
 </small>
 
-
-
-
-
 </div>
 
-
-
-
-
 </div>
-
-
 
 `;
 
-
-
 });
 
-
-
 }
-
-
-
-
-
-
-
-
-
 
 function loadMore(){
 
-
-
 visible += 12;
-
-
 
 display();
 
-
-
 }
-
-
-
-
-
-
-
-
 
 function openModal(image){
 
-
-
 document
-
 .getElementById("modal")
-
 .style.display = "flex";
 
-
-
-
-
-
 document
-
 .getElementById("modalImage")
-
-.src =
-
-"http://localhost:5000/uploads/" + image;
-
-
+.src = image;
 
 }
-
-
-
-
-
-
-
-
 
 function closeModal(){
 
-
-
 document
-
 .getElementById("modal")
-
 .style.display = "none";
 
-
-
 }
-
-
-
-
-
-
-
-
 
 function toggleMenu(){
 
-
-
 document
-
 .getElementById("nav")
-
 .classList.toggle("show");
-
-
 
 }
 
-
-
-
-
-
-
 getBranding();
 
-
-
 </script>
-
-
 
 </body>
 

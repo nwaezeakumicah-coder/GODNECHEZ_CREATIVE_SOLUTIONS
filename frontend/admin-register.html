@@ -7,98 +7,236 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create Admin</title>
+<title>Create Admin | GODNECHEZ</title>
 
 
 <style>
 
+:root{
+
+--blue:#0A3D91;
+--navy:#061B3A;
+--white:#FFFFFF;
+--yellow:#FFD400;
+--red:#E63946;
+--gray:#6B7280;
+
+}
+
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+font-family:Arial,sans-serif;
+
+}
+
+
+
 body{
 
-font-family:Arial, sans-serif;
-
-background:#0B0F14;
+min-height:100vh;
 
 display:flex;
 
-justify-content:center;
-
 align-items:center;
 
-height:100vh;
+justify-content:center;
+
+padding:20px;
+
+background:
+
+radial-gradient(circle at top right,
+
+rgba(255,212,0,.2),
+
+transparent 35%),
+
+var(--blue);
 
 }
+
+
 
 
 .container{
 
 background:white;
 
-padding:30px;
+width:100%;
 
-width:350px;
+max-width:380px;
 
-border-radius:10px;
+padding:35px;
+
+border-radius:25px;
+
+box-shadow:0 20px 50px rgba(0,0,0,.25);
 
 }
+
+
+
+h2{
+
+text-align:center;
+
+color:var(--navy);
+
+margin-bottom:25px;
+
+}
+
+
 
 
 input{
 
 width:100%;
 
-padding:12px;
+padding:14px;
 
 margin:10px 0;
 
+border-radius:10px;
+
+border:1px solid #ddd;
+
+outline:none;
+
+font-size:15px;
+
 }
+
+
+
+input:focus{
+
+border-color:var(--blue);
+
+}
+
+
+
 
 
 button{
 
 width:100%;
 
-padding:12px;
+padding:15px;
 
-background:#0f4cb4;
+margin-top:10px;
+
+background:var(--yellow);
+
+color:var(--navy);
 
 border:none;
 
-cursor:pointer;
+border-radius:30px;
 
 font-weight:bold;
 
+cursor:pointer;
+
+font-size:15px;
+
+transition:.3s;
+
 }
+
+
+
+button:hover{
+
+background:var(--red);
+
+color:white;
+
+transform:translateY(-2px);
+
+}
+
+
+
 
 
 #message{
 
 margin-top:15px;
 
+text-align:center;
+
+font-weight:bold;
+
+color:var(--blue);
+
 }
+
+
 
 
 </style>
 
-</head>
 
+</head>
 
 
 <body>
 
 
+
 <div class="container">
 
 
-<h2>Create Admin Account</h2>
+<h2>
+
+Create Admin Account
+
+</h2>
 
 
-<input id="username" placeholder="Username">
+
+<input 
+
+id="username"
+
+placeholder="Username"
+
+>
 
 
-<input id="email" placeholder="Email">
+
+<input
+
+id="email"
+
+type="email"
+
+placeholder="Email"
+
+>
 
 
-<input id="password" type="password" placeholder="Password">
+
+<input
+
+id="password"
+
+type="password"
+
+placeholder="Password"
+
+>
+
+
 
 
 <button onclick="registerAdmin()">
@@ -109,7 +247,9 @@ Create Account
 
 
 
+
 <p id="message"></p>
+
 
 
 </div>
@@ -120,6 +260,11 @@ Create Account
 
 
 <script>
+
+
+const API="https://godnechez-creative-solutions.onrender.com";
+
+
 
 
 async function registerAdmin(){
@@ -144,9 +289,13 @@ password:document.getElementById("password").value
 
 
 
+try{
+
+
+
 const res = await fetch(
 
-"http://localhost:5000/api/admin/register",
+API+"/api/admin/register",
 
 {
 
@@ -158,7 +307,6 @@ headers:{
 
 
 "Content-Type":"application/json"
-
 
 },
 
@@ -175,14 +323,31 @@ body:JSON.stringify(data)
 
 
 
-
 const result = await res.json();
 
 
 
 
 
-document.getElementById("message").innerHTML = result.message;
+document.getElementById("message").innerHTML =
+
+result.message;
+
+
+
+}
+
+
+
+catch(error){
+
+
+document.getElementById("message").innerHTML =
+
+"Unable to connect to server";
+
+
+}
 
 
 

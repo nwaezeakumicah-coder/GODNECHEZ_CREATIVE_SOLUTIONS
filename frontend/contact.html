@@ -22,7 +22,6 @@
 
 }
 
-
 *{
 
 margin:0;
@@ -32,16 +31,12 @@ font-family:Arial,sans-serif;
 
 }
 
-
 body{
 
 background:var(--white);
-
 color:var(--navy);
 
 }
-
-
 
 /* NAVBAR */
 
@@ -61,113 +56,78 @@ z-index:1000;
 
 }
 
-
-
 .navbar{
 
 max-width:1200px;
-
 margin:auto;
 
 padding:15px 20px;
 
 display:flex;
-
 justify-content:space-between;
-
 align-items:center;
 
 }
 
-
-
 /* BRAND */
-
 
 .brand{
 
 display:flex;
-
 align-items:center;
-
 gap:12px;
 
 }
 
-
-
 .brand img{
 
 width:45px;
-
 height:45px;
-
 object-fit:contain;
 
 }
 
-
-
 .logo-text{
 
 display:flex;
-
 flex-direction:column;
 
 font-size:20px;
-
 font-weight:900;
-
 line-height:1;
 
 color:white;
 
 }
 
-
-
 .logo-text span{
 
 font-size:11px;
-
 letter-spacing:1px;
 
 color:var(--yellow);
 
 }
 
-
-
-
-
 /* NAV LINKS */
-
 
 .nav{
 
 display:flex;
-
 align-items:center;
-
 gap:22px;
 
 }
 
-
-
 .nav a{
 
 text-decoration:none;
-
 color:white;
 
 font-weight:bold;
-
 font-size:14px;
 
 }
-
-
 
 .nav a:hover{
 
@@ -175,50 +135,35 @@ color:var(--yellow);
 
 }
 
-
-
-
 .admin-link{
 
 background:var(--yellow);
-
 color:var(--navy)!important;
 
 padding:10px 18px;
-
 border-radius:30px;
 
 }
 
-
-
 .admin-link:hover{
 
 background:var(--red);
-
 color:white!important;
 
 }
-
-
-
 
 .menu{
 
 display:none;
 
 font-size:28px;
-
 cursor:pointer;
 
 color:white;
 
 }
 
-
-
 /* HERO */
-
 
 .hero{
 
@@ -227,30 +172,21 @@ padding:120px 20px 90px;
 text-align:center;
 
 background:
-
 linear-gradient(
-
 135deg,
-
 var(--blue),
-
 var(--navy)
-
 );
 
 color:white;
 
 }
 
-
-
 .hero h1{
 
 font-size:3rem;
 
 }
-
-
 
 .hero span{
 
@@ -261,17 +197,12 @@ color:var(--yellow);
 .hero p{
 
 margin-top:20px;
-
 color:#ddd;
-
 font-size:18px;
 
 }
 
-
-
 /* CONTACT */
-
 
 .contact{
 
@@ -282,14 +213,11 @@ margin:auto;
 padding:80px 20px;
 
 display:grid;
-
 grid-template-columns:1fr 1fr;
 
 gap:40px;
 
 }
-
-
 
 .box{
 
@@ -303,8 +231,6 @@ border-top:5px solid var(--yellow);
 
 }
 
-
-
 .box h2{
 
 color:var(--navy);
@@ -313,15 +239,11 @@ margin-bottom:20px;
 
 }
 
-
-
 .info{
 
 margin-bottom:20px;
 
 }
-
-
 
 .info h4{
 
@@ -329,20 +251,14 @@ color:var(--blue);
 
 }
 
-
-
 .info p{
 
 color:var(--gray);
 
 }
 
-
-
-
 input,
 textarea{
-
 
 width:100%;
 
@@ -351,14 +267,11 @@ padding:14px;
 margin:10px 0;
 
 border:1px solid #ddd;
-
 border-radius:10px;
 
 font-size:15px;
 
 }
-
-
 
 input:focus,
 textarea:focus{
@@ -367,66 +280,45 @@ outline:2px solid var(--blue);
 
 }
 
-
-
 textarea{
 
 height:140px;
-
 resize:none;
 
 }
-
-
 
 button{
 
 padding:14px 25px;
 
 background:var(--yellow);
-
 color:var(--navy);
 
 border:none;
-
 border-radius:10px;
 
 font-weight:bold;
-
 cursor:pointer;
 
 transition:.3s;
 
 }
 
-
-
 button:hover{
 
 background:var(--red);
-
 color:white;
 
 transform:translateY(-3px);
 
 }
 
-
-
 #response{
 
 margin-top:15px;
-
 font-weight:bold;
 
 }
-
-
-
-
-
-/* MAP */
-
 
 .map{
 
@@ -438,24 +330,15 @@ padding:0 20px 80px;
 
 }
 
-
-
 .map iframe{
 
 width:100%;
-
 height:450px;
 
 border:none;
-
 border-radius:20px;
 
 }
-
-
-
-
-
 
 footer{
 
@@ -469,33 +352,24 @@ padding:40px 20px;
 
 }
 
-
-
-
-
 @media(max-width:768px){
-
 
 .nav{
 
 position:fixed;
 
 top:76px;
-
 right:-100%;
 
 width:250px;
-
 height:100vh;
 
 background:var(--blue);
 
 display:flex;
-
 flex-direction:column;
 
 padding:30px;
-
 gap:20px;
 
 transition:.4s;
@@ -504,15 +378,11 @@ box-shadow:-5px 0 20px rgba(0,0,0,.2);
 
 }
 
-
-
 .nav a{
 
 color:white;
 
 }
-
-
 
 .nav.show{
 
@@ -520,15 +390,11 @@ right:0;
 
 }
 
-
-
 .menu{
 
 display:block;
 
 }
-
-
 
 .contact{
 
@@ -536,15 +402,11 @@ grid-template-columns:1fr;
 
 }
 
-
-
 .hero h1{
 
 font-size:2.3rem;
 
 }
-
-
 
 }
 
@@ -554,73 +416,41 @@ font-size:2.3rem;
 
 <body>
 
-
 <header>
 
 <div class="navbar">
 
-
 <div class="brand">
 
-<img src="logo.png" alt="GODNECHEZ Logo">
-
+<img src="images/Untitled-1.png" alt="GODNECHEZ Logo">
 
 <div class="logo-text">
 
 GODNECHEZ
 
 <span>
-
 CREATIVE SOLUTIONS
-
 </span>
 
 </div>
 
-
 </div>
-
-
-
 
 <div class="nav" id="nav">
 
+<a href="index.html">Home</a>
 
-<a href="index.html">
-Home
-</a>
+<a href="portfolio.html">Portfolio</a>
 
+<a href="services.html">Services</a>
 
-<a href="portfolio.html">
-Portfolio
-</a>
+<a href="about.html">About</a>
 
+<a href="faq.html">FAQ</a>
 
-<a href="services.html">
-Services
-</a>
+<a href="testimonials.html">Testimonials</a>
 
-
-<a href="about.html">
-About
-</a>
-
-
-<a href="faq.html">
-FAQ
-</a>
-
-
-<a href="testimonials.html">
-Testimonials
-</a>
-
-
-<a href="contact.html">
-Contact
-</a>
-
-
+<a href="contact.html">Contact</a>
 
 <a href="admin-login.html" class="admin-link">
 
@@ -628,13 +458,7 @@ Contact
 
 </a>
 
-
-
 </div>
-
-
-
-
 
 <div class="menu" onclick="toggleMenu()">
 
@@ -642,17 +466,11 @@ Contact
 
 </div>
 
-
-
 </div>
 
 </header>
 
-
-
-
 <section class="hero">
-
 
 <h1>
 
@@ -660,29 +478,19 @@ Contact <span>Us</span>
 
 </h1>
 
-
 <p>
 
 Let's discuss your next branding, design, printing or creative project.
 
 </p>
 
-
 </section>
-
-
-
-
-
 
 <section class="contact">
 
-
 <div class="box">
 
-
 <h2>Get In Touch</h2>
-
 
 <div class="info">
 
@@ -692,7 +500,6 @@ Let's discuss your next branding, design, printing or creative project.
 
 </div>
 
-
 <div class="info">
 
 <h4>Email</h4>
@@ -700,7 +507,6 @@ Let's discuss your next branding, design, printing or creative project.
 <p>nwaezeakumicah@gmail.com</p>
 
 </div>
-
 
 <div class="info">
 
@@ -710,36 +516,36 @@ Let's discuss your next branding, design, printing or creative project.
 
 </div>
 
-
 </div>
-
-
-
-
-
-
-
 
 <div class="box">
 
-
 <h2>Send Message</h2>
-
 
 <form id="contactForm">
 
+<input
+id="name"
+type="text"
+placeholder="Your Name"
+required>
 
-<input id="name" type="text" placeholder="Your Name" required>
+<input
+id="email"
+type="email"
+placeholder="Your Email"
+required>
 
+<input
+id="subject"
+type="text"
+placeholder="Subject"
+required>
 
-<input id="email" type="email" placeholder="Your Email" required>
-
-
-<input id="subject" type="text" placeholder="Subject" required>
-
-
-<textarea id="message" placeholder="Your Message" required></textarea>
-
+<textarea
+id="message"
+placeholder="Your Message"
+required></textarea>
 
 <button type="submit">
 
@@ -747,37 +553,25 @@ Send Message
 
 </button>
 
-
 </form>
-
 
 <p id="response"></p>
 
-
 </div>
 
-
 </section>
-
-
-
-
-
 
 
 
 <section class="map">
 
-
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d899.06017648575!2d7.363909969531981!3d5.107675635459158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1042994e5cc2a327%3A0xb8875bc51b65247!2s51%20Tenant%20Rd%2C%20Aba%2C%20450103%2C%20Abia!5e1!3m2!1sen!2sng!4v1781896217921!5m2!1sen!2sng" allowfullscreen="" loading="lazy"></iframe>
+<iframe
+src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d899.06017648575!2d7.363909969531981!3d5.107675635459158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1042994e5cc2a327%3A0xb8875bc51b65247!2s51%20Tenant%20Rd%2C%20Aba%2C%20450103%2C%20Abia!5e1!3m2!1sen!2sng!4v1781896217921!5m2!1sen!2sng"
+allowfullscreen=""
+loading="lazy">
+</iframe>
 
 </section>
-
-
-
-
-
-
 
 <footer>
 
@@ -785,135 +579,104 @@ Send Message
 
 </footer>
 
-
-
-
-
-
-
 <script>
 
-
-const API="https://godnechez-creative-solutions.onrender.com/";
-
-
-
+const API =
+"https://godnechez-creative-solutions.onrender.com";
 
 function toggleMenu(){
 
 document
-
 .getElementById("nav")
-
 .classList.toggle("show");
 
 }
 
-
-
-
-
 document
-
 .getElementById("contactForm")
-
 .addEventListener(
 
 "submit",
 
 async function(e){
 
-
 e.preventDefault();
 
+const data = {
 
+name:
+document.getElementById("name").value,
 
-const data={
+email:
+document.getElementById("email").value,
 
+subject:
+document.getElementById("subject").value,
 
-name:document.getElementById("name").value,
-
-
-email:document.getElementById("email").value,
-
-
-subject:document.getElementById("subject").value,
-
-
-message:document.getElementById("message").value
-
+message:
+document.getElementById("message").value
 
 };
 
+try{
 
+const res = await fetch(
 
-
-const res=await fetch(
-
-API+"/api/messages",
+API + "/api/messages",
 
 {
-
-
 method:"POST",
 
 headers:{
-
-
 "Content-Type":"application/json"
-
-
 },
 
 body:JSON.stringify(data)
-
 
 }
 
 );
 
-
-
-const result=await res.json();
-
-
-
+const result = await res.json();
 
 if(result.success){
 
-
-document.getElementById("response").innerHTML=
-
+document
+.getElementById("response")
+.innerHTML =
 "Message sent successfully";
 
-
 this.reset();
-
 
 }
 
 else{
 
-
-document.getElementById("response").innerHTML=
-
-"Failed to send message";
-
-
-}
-
-
+document
+.getElementById("response")
+.innerHTML =
+result.message || "Failed to send message";
 
 }
 
+}
+
+catch(error){
+
+document
+.getElementById("response")
+.innerHTML =
+"Unable to connect to server";
+
+console.log(error);
+
+}
+
+}
 
 );
 
-
-
 </script>
 
-
 </body>
-
 </html>

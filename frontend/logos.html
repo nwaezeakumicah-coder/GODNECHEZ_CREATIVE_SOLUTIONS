@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Logo Designs | GODNECHEZ CREATIVE</title>
@@ -231,8 +232,6 @@ color:white;
 
 }
 
-
-
 /* HERO */
 
 
@@ -285,6 +284,9 @@ color:var(--gray);
 font-size:18px;
 
 }
+
+
+
 /* CATEGORY NAV */
 
 
@@ -541,8 +543,6 @@ max-height:95%;
 
 border-radius:20px;
 
-animation:zoom .4s ease;
-
 }
 
 
@@ -567,10 +567,6 @@ margin-top:60px;
 }
 
 
-
-
-
-/* ANIMATIONS */
 
 
 @keyframes fadeDown{
@@ -620,31 +616,6 @@ transform:translateY(0);
 
 
 
-
-@keyframes zoom{
-
-from{
-
-transform:scale(.7);
-
-opacity:0;
-
-}
-
-to{
-
-transform:scale(1);
-
-opacity:1;
-
-}
-
-}
-
-
-
-
-
 /* MOBILE */
 
 
@@ -663,7 +634,7 @@ width:250px;
 
 height:100vh;
 
-background:var(--white);
+background:white;
 
 flex-direction:column;
 
@@ -672,8 +643,6 @@ padding:35px;
 gap:25px;
 
 transition:.4s;
-
-box-shadow:-5px 0 20px rgba(0,0,0,.15);
 
 }
 
@@ -721,6 +690,8 @@ font-size:2.3rem;
 </style>
 
 </head>
+
+
 <body>
 
 
@@ -730,12 +701,10 @@ font-size:2.3rem;
 <div class="navbar">
 
 
-
 <div class="brand">
 
 
-<img src="logo.png" alt="GODNECHEZ Logo">
-
+<img src="images/Untitled-1.png" alt="GODNECHEZ Logo">
 
 
 <div class="logo-text">
@@ -757,13 +726,7 @@ CREATIVE SOLUTIONS
 </div>
 
 
-
-
-
-
-
 <div class="nav" id="nav">
-
 
 
 <a href="index.html">
@@ -771,11 +734,9 @@ Home
 </a>
 
 
-
 <a href="portfolio.html">
 Portfolio
 </a>
-
 
 
 <a href="services.html">
@@ -783,11 +744,9 @@ Services
 </a>
 
 
-
 <a href="about.html">
 About
 </a>
-
 
 
 <a href="faq.html">
@@ -795,19 +754,14 @@ FAQ
 </a>
 
 
-
 <a href="testimonials.html">
 Testimonials
 </a>
 
 
-
 <a href="contact.html">
 Contact
 </a>
-
-
-
 
 
 <a href="admin-login.html" class="admin-link">
@@ -817,14 +771,7 @@ Contact
 </a>
 
 
-
-
 </div>
-
-
-
-
-
 
 
 <div class="menu" onclick="toggleMenu()">
@@ -834,17 +781,9 @@ Contact
 </div>
 
 
-
-
 </div>
 
-
 </header>
-
-
-
-
-
 
 
 <section class="hero">
@@ -1126,9 +1065,9 @@ onclick="openModal('${item.image}')">
 
 <img
 
-src=""${item.image}">
+src="${item.image}"
 
-alt="${item.title}"
+alt="${item.title || 'Logo Design'}"
 
 >
 
@@ -1225,9 +1164,7 @@ document
 
 .getElementById("modalImage")
 
-.src =
-
-"http://localhost:5000/uploads/" + image;
+.src = image;
 
 
 

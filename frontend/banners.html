@@ -20,7 +20,6 @@
 
 }
 
-
 *{
 
 margin:0;
@@ -30,145 +29,93 @@ font-family:Arial,sans-serif;
 
 }
 
-
 body{
 
 background:white;
-
 color:var(--black);
-
 overflow-x:hidden;
 
 }
 
-
-
 /* NAVBAR */
-
 
 header{
 
 position:fixed;
-
 top:0;
-
 width:100%;
-
 background:rgba(255,255,255,.95);
-
 backdrop-filter:blur(15px);
-
 border-bottom:1px solid #eee;
-
 z-index:1000;
 
 }
 
-
-
 .navbar{
 
 max-width:1200px;
-
 margin:auto;
-
 padding:15px 20px;
-
 display:flex;
-
 justify-content:space-between;
-
 align-items:center;
 
 }
 
-
-
-
 /* BRAND */
-
 
 .brand{
 
 display:flex;
-
 align-items:center;
-
 gap:12px;
 
 }
 
-
-
 .brand img{
 
 width:45px;
-
 height:45px;
-
 object-fit:contain;
 
 }
 
-
-
 .logo-text{
 
 display:flex;
-
 flex-direction:column;
-
 font-size:20px;
-
 font-weight:900;
-
 line-height:1;
 
 }
 
-
-
 .logo-text span{
 
 font-size:11px;
-
 letter-spacing:1px;
-
 color:var(--yellow);
 
 }
 
-
-
-
 /* NAV */
-
 
 .nav{
 
 display:flex;
-
 align-items:center;
-
 gap:22px;
 
 }
 
-
-
 .nav a{
 
 text-decoration:none;
-
 color:#111;
-
 font-weight:bold;
-
 font-size:14px;
 
 }
-
-
 
 .nav a:hover{
 
@@ -176,56 +123,36 @@ color:var(--red);
 
 }
 
-
-
-
 .admin-link{
 
 background:var(--yellow);
-
 padding:10px 18px;
-
 border-radius:30px;
 
 }
 
-
-
 .menu{
 
 display:none;
-
 font-size:28px;
-
 cursor:pointer;
 
 }
 
-
-
-
-
-
 /* HERO */
-
 
 .hero{
 
 text-align:center;
-
 padding:150px 20px 60px;
-
 background:
-
-radial-gradient(circle at top right,
-
+radial-gradient(
+circle at top right,
 rgba(15,76,180,.15),
-
-transparent 35%);
+transparent 35%
+);
 
 }
-
-
 
 .hero h1{
 
@@ -233,71 +160,47 @@ font-size:3rem;
 
 }
 
-
-
 .hero span{
 
 color:var(--yellow);
 
 }
 
-
-
 .hero p{
 
 margin-top:15px;
-
 color:var(--gray);
 
 }
 
-
-
-
 /* CATEGORY */
-
 
 .categories{
 
 text-align:center;
-
 padding:20px;
 
 }
 
-
-
 .categories a{
 
 display:inline-block;
-
 padding:12px 18px;
-
 margin:6px;
-
 background:#eee;
-
 border-radius:25px;
-
 text-decoration:none;
-
 color:black;
-
 font-weight:bold;
-
 transition:.3s;
 
 }
-
-
 
 .categories a:hover{
 
 background:var(--yellow);
 
 }
-
-
 
 .active{
 
@@ -307,44 +210,28 @@ background:var(--yellow)!important;
 
 /* GALLERY */
 
-
 .gallery{
 
 max-width:1200px;
-
 margin:auto;
-
 padding:30px 20px;
-
 display:grid;
-
 grid-template-columns:
-
 repeat(auto-fit,minmax(240px,1fr));
-
 gap:25px;
 
 }
 
-
-
 .card{
 
 background:#f5f5f5;
-
 border-radius:18px;
-
 overflow:hidden;
-
 cursor:pointer;
-
 transition:.3s;
-
 box-shadow:0 10px 25px rgba(0,0,0,.08);
 
 }
-
-
 
 .card:hover{
 
@@ -352,21 +239,14 @@ transform:translateY(-8px);
 
 }
 
-
-
 .card img{
 
 width:100%;
-
 aspect-ratio:1/1;
-
 object-fit:cover;
-
 display:block;
 
 }
-
-
 
 .info{
 
@@ -374,15 +254,11 @@ padding:15px;
 
 }
 
-
-
 .info h3{
 
 margin-bottom:8px;
 
 }
-
-
 
 .info small{
 
@@ -390,140 +266,80 @@ color:var(--gray);
 
 }
 
-
-
-
-
-
 /* LOAD MORE */
-
 
 .load{
 
 text-align:center;
-
 padding:40px;
 
 }
-
-
 
 .load button{
 
 padding:14px 30px;
-
 background:var(--yellow);
-
 border:none;
-
 border-radius:12px;
-
 font-weight:bold;
-
 cursor:pointer;
 
 }
 
-
-
-
-
 /* MODAL */
-
 
 .modal{
 
 position:fixed;
-
 inset:0;
-
 background:rgba(0,0,0,.92);
-
 display:none;
-
 align-items:center;
-
 justify-content:center;
-
 z-index:2000;
-
 padding:20px;
 
 }
 
-
-
 .modal img{
 
 max-width:95%;
-
 max-height:95%;
-
 border-radius:15px;
 
 }
 
-
-
-
-
-
 /* FOOTER */
-
 
 footer{
 
 background:var(--dark);
-
 color:white;
-
 padding:40px;
-
 text-align:center;
-
 margin-top:60px;
 
 }
 
-
-
-
-
-
-
 /* MOBILE */
 
-
 @media(max-width:768px){
-
 
 .nav{
 
 position:fixed;
-
 top:76px;
-
 right:-100%;
-
 width:250px;
-
 height:100vh;
-
 background:white;
-
 flex-direction:column;
-
 padding:30px;
-
 gap:20px;
-
 transition:.4s;
-
 box-shadow:-5px 0 20px rgba(0,0,0,.1);
 
 }
-
-
 
 .nav.show{
 
@@ -531,15 +347,11 @@ right:0;
 
 }
 
-
-
 .menu{
 
 display:block;
 
 }
-
-
 
 .hero h1{
 
@@ -547,217 +359,112 @@ font-size:2.2rem;
 
 }
 
-
 }
-
-
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <header>
 
-
 <div class="navbar">
-
-
 
 <div class="brand">
 
-
-<img src="logo.png" alt="GODNECHEZ Logo">
-
-
+<img src="images/Untitled-1.png" alt="GODNECHEZ Logo">
 
 <div class="logo-text">
 
-
 GODNECHEZ
 
-
 <span>
-
 CREATIVE SOLUTIONS
-
 </span>
 
-
 </div>
 
-
 </div>
-
-
-
-
 
 <div class="nav" id="nav">
 
+<a href="index.html">Home</a>
 
+<a href="portfolio.html">Portfolio</a>
 
-<a href="index.html">
-Home
-</a>
+<a href="services.html">Services</a>
 
+<a href="about.html">About</a>
 
-<a href="portfolio.html">
-Portfolio
-</a>
+<a href="faq.html">FAQ</a>
 
+<a href="testimonials.html">Testimonials</a>
 
-<a href="services.html">
-Services
-</a>
-
-
-<a href="about.html">
-About
-</a>
-
-
-<a href="faq.html">
-FAQ
-</a>
-
-
-<a href="testimonials.html">
-Testimonials
-</a>
-
-
-<a href="contact.html">
-Contact
-</a>
-
-
+<a href="contact.html">Contact</a>
 
 <a href="admin-login.html" class="admin-link">
-
 👤 Admin Login
-
 </a>
 
-
-
 </div>
-
-
-
-
 
 <div class="menu" onclick="toggleMenu()">
-
 ☰
-
 </div>
 
-
 </div>
-
 
 </header>
 
-
-
-
 <section class="hero">
 
-
 <h1>
-
 Banner
-
 <span>
-
 Gallery
-
 </span>
-
-
 </h1>
 
-
-
 <p>
-
 Explore our banner and large format design collection.
-
 </p>
 
-
-
 </section>
-
-
-
 
 <div class="categories">
 
-
 <a href="portfolio.html">
-
 All
-
 </a>
-
-
 
 <a href="logos.html">
-
 Logos
-
 </a>
-
-
 
 <a href="flyers.html">
-
 Flyers
-
 </a>
-
-
 
 <a href="branding.html">
-
 Branding
-
 </a>
-
-
 
 <a href="dtf.html">
-
 DTF
-
 </a>
-
-
 
 <a href="banners.html" class="active">
-
 Banners
-
 </a>
-
-
 
 </div>
 
-
 <section class="gallery" id="gallery">
-
 
 </section>
 
-
 <div class="load">
-
 
 <button onclick="loadMore()">
 
@@ -765,272 +472,134 @@ Load More Banner Designs
 
 </button>
 
-
 </div>
-
 
 <div class="modal" id="modal" onclick="closeModal()">
 
-
-
 <img id="modalImage">
-
 
 </div>
 
-
 <footer>
 
-
 © 2026 GODNECHEZ CREATIVE SOLUTIONS
-
 
 </footer>
 
 <script>
 
-
 const API =
+"https://godnechez-creative-solutions.onrender.com/api/designs";
 
-"https://godnechez-creative-solutions.onrender.com/";
+let banners = [];
 
-
-
-let banners=[];
-
-let visible=12;
-
-
-
-
-
+let visible = 12;
 
 async function getBanners(){
 
-
-
 try{
-
 
 const res = await fetch(API);
 
-
 const data = await res.json();
 
-
-
-
 banners = data.data.filter(item =>
-
 
 (item.category || "").toLowerCase() === "banners"
 
 );
 
-
-
 display();
 
-
-
 }
-
-
 
 catch(err){
 
-
 console.log(err);
 
-
 }
 
-
 }
-
-
-
-
-
-
-
-
 
 function display(){
 
-
-
 const gallery =
-
 document.getElementById("gallery");
 
-
-
-gallery.innerHTML="";
-
-
-
+gallery.innerHTML = "";
 
 banners
+.slice(0, visible)
+.forEach(item => {
 
-.slice(0,visible)
-
-.forEach(item=>{
-
-
-gallery.innerHTML +=`
-
-
+gallery.innerHTML += `
 
 <div class="card"
-
 onclick="openModal('${item.image}')">
 
-
-
-<img src="${item.image}">
-
-
+<img
+src="${item.image}"
+alt="${item.title}">
 
 <div class="info">
 
-
-
 <h3>
-
 ${item.title}
-
 </h3>
 
-
-
 <small>
-
 ${item.category}
-
 </small>
 
-
-
 </div>
 
-
-
 </div>
-
-
 
 `;
 
-
 });
 
-
-
 }
-
-
-
-
-
-
-
 
 function loadMore(){
 
-
-visible +=12;
-
+visible += 12;
 
 display();
 
-
 }
-
-
-
-
-
-
-
 
 function openModal(image){
 
-
-
 document
-
 .getElementById("modal")
-
-.style.display="flex";
-
-
-
-
+.style.display = "flex";
 
 document
-
 .getElementById("modalImage")
-
-.src=
-
-"http://localhost:5000/uploads/"+image;
-
-
+.src = image;
 
 }
-
-
-
-
-
-
-
 
 function closeModal(){
 
-
 document
-
 .getElementById("modal")
-
-.style.display="none";
-
+.style.display = "none";
 
 }
-
-
-
-
-
-
 
 function toggleMenu(){
 
-
-
 document
-
 .getElementById("nav")
-
 .classList.toggle("show");
-
-
 
 }
 
-
-
-
-
-
-
 getBanners();
 
-
-
 </script>
-
 
 </body>
 

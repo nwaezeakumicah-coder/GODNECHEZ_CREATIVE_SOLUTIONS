@@ -9,12 +9,11 @@
 
 <title>Verify OTP</title>
 
-
 <style>
 
 body{
 
-font-family:Arial;
+font-family:Arial,sans-serif;
 
 background:#0B0F14;
 
@@ -26,8 +25,9 @@ justify-content:center;
 
 align-items:center;
 
-}
+margin:0;
 
+}
 
 .box{
 
@@ -39,8 +39,15 @@ width:350px;
 
 border-radius:15px;
 
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+
 }
 
+h2{
+
+margin-bottom:20px;
+
+}
 
 input{
 
@@ -50,9 +57,13 @@ padding:12px;
 
 margin:10px 0;
 
+box-sizing:border-box;
+
+border:1px solid #ddd;
+
+border-radius:8px;
+
 }
-
-
 
 button{
 
@@ -62,36 +73,50 @@ padding:12px;
 
 background:#0f4cb4;
 
+color:white;
+
 border:none;
+
+border-radius:8px;
 
 font-weight:bold;
 
 cursor:pointer;
 
+margin-top:10px;
+
 }
 
+button:hover{
+
+opacity:.9;
+
+}
+
+#message{
+
+margin-top:15px;
+
+font-size:14px;
+
+text-align:center;
+
+}
 
 </style>
 
-
 </head>
-
 
 <body>
 
-
 <div class="box">
-
 
 <h2>Enter OTP</h2>
 
-
-<input 
+<input
 id="otp"
-
-placeholder="6 Digit OTP">
-
-
+placeholder="6 Digit OTP"
+maxlength="6">
 
 <button onclick="verifyOTP()">
 
@@ -99,105 +124,99 @@ Verify OTP
 
 </button>
 
-
-
 <p id="message"></p>
-
 
 </div>
 
-
-
-
-
-
-
 <script>
 
-
-const API="https://godnechez-creative-solutions.onrender.com/";
-
-
+const API = "https://godnechez-creative-solutions.onrender.com";
 
 async function verifyOTP(){
 
+const email =
+localStorage.getItem("resetEmail");
 
+const otpValue =
+document.getElementById("otp").value.trim();
 
-const email = localStorage.getItem(
+const message =
+document.getElementById("message");
 
-"resetEmail"
+if(!email){
 
-);
+message.innerHTML =
+"Reset session expired. Start again.";
 
+return;
 
+}
 
+if(!otpValue){
 
+message.innerHTML =
+"Please enter the OTP.";
+
+return;
+
+}
+
+try{
 
 const res = await fetch(
 
-API+"/api/admin/verify-otp",
+API + "/api/admin/verify-otp",
 
 {
 
-
 method:"POST",
 
-
 headers:{
-
 "Content-Type":"application/json"
-
 },
-
 
 body:JSON.stringify({
 
 email:email,
 
-otp:otp.value
+otp:otpValue
 
 })
-
 
 }
 
 );
 
-
-
-
-
 const data = await res.json();
-
-
-
-
 
 if(data.success){
 
-
-window.location.href="reset-password.html";
-
+window.location.href =
+"reset-password.html";
 
 }
-
 
 else{
 
-
-message.innerHTML=data.message;
-
-
-}
-
-
+message.innerHTML =
+data.message || "Invalid OTP";
 
 }
 
+}
 
+catch(error){
+
+console.error(error);
+
+message.innerHTML =
+"Server connection error";
+
+}
+
+}
 
 </script>
-
 
 </body>
 
