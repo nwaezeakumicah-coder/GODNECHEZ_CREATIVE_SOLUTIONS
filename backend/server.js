@@ -122,22 +122,27 @@ EMAIL SYSTEM
 =====================
 */
 
+const nodemailer = require("nodemailer");
+
+
+// CREATE EMAIL TRANSPORTER
 
 const transporter = nodemailer.createTransport({
 
-    service:"gmail",
+    service: "gmail",
 
-    auth:{
+    auth: {
 
-        user:process.env.EMAIL_USER,
+        user: process.env.EMAIL_USER,
 
-        pass:process.env.EMAIL_PASS
+        pass: process.env.EMAIL_PASS
 
     }
 
 });
 
 
+// CHECK EMAIL CONNECTION
 
 transporter.verify((error)=>{
 
@@ -161,6 +166,132 @@ transporter.verify((error)=>{
 
 
 
+// TEMP OTP STORAGE
+
+let otpStore = {};
+
+
+
+
+// GENERATE OTP FUNCTION
+
+function generateOTP(){
+
+    return Math.floor(
+        100000 + Math.random() * 900000
+    ).toString();
+
+}
+
+
+
+
+// SEND OTP FUNCTION
+
+async function sendOTP(email){
+
+
+    const otp = generateOTP();
+
+
+    otpStore[email] = {
+
+        otp: otp,
+
+        expires:
+        Date.now() + 5 * 60 * 1000
+
+    };
+
+
+
+    await transporter.sendMail({
+
+        from: process.env.EMAIL_USER,
+
+        to: email,
+
+        subject: "Your OTP Code",
+
+        html: `
+
+        <h2>Password Reset OTP</h2>
+
+        <p>Your OTP code is:</p>
+
+        <h1>${otp}</h1>
+
+        <p>This code expires in 5 minutes.</p>
+
+        `
+
+    });
+
+
+
+    console.log(
+        "OTP sent to:",
+        email
+    );
+
+
+}
+
+
+
+
+// VERIFY OTP FUNCTION
+
+function verifyOTP(email, otp){
+
+
+    const record = otpStore[email];
+
+
+    if(!record){
+
+        return false;
+
+    }
+
+
+
+    if(Date.now() > record.expires){
+
+        delete otpStore[email];
+
+        return false;
+
+    }
+
+
+
+    if(record.otp !== otp){
+
+        return false;
+
+    }
+
+
+
+    delete otpStore[email];
+
+
+    return true;
+
+
+}
+
+
+
+
+module.exports = {
+
+    sendOTP,
+
+    verifyOTP
+
+};
 
 
 
