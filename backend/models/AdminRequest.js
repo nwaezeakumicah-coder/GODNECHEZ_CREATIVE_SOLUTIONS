@@ -19,9 +19,15 @@ type:String,
 required:true
 },
 
-approved:{
-type:Boolean,
-default:false
+role:{
+type:String,
+default:"admin"
+},
+
+status:{
+type:String,
+enum:["pending","approved","rejected"],
+default:"pending"
 },
 
 createdAt:{
