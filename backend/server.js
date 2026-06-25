@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -11,8 +10,6 @@ const nodemailer = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-
-
 const Design = require("./models/Design");
 const Team = require("./models/Team");
 const Admin = require("./models/Admin");
@@ -20,21 +17,51 @@ const FAQ = require("./models/FAQ");
 const Testimonial = require("./models/Testimonial");
 const Message = require("./models/Message");
 
-
-
 const app = express();
-
 
 const PORT = process.env.PORT || 5000;
 
-
 const SECRET =
-process.env.JWT_SECRET || "godnechez_secret";
+process.env.JWT_SECRET ||
+"godnechez_secret";
 
+/*
+=====================
+ENVIRONMENT CHECK
+=====================
+*/
 
-
-
-
+console.log("=================================");
+console.log("GODNECHEZ ENVIRONMENT CHECK");
+console.log(
+"MONGO_URI:",
+process.env.MONGO_URI ? "FOUND" : "MISSING"
+);
+console.log(
+"JWT_SECRET:",
+process.env.JWT_SECRET ? "FOUND" : "MISSING"
+);
+console.log(
+"EMAIL_USER:",
+process.env.EMAIL_USER ? "FOUND" : "MISSING"
+);
+console.log(
+"EMAIL_PASS:",
+process.env.EMAIL_PASS ? "FOUND" : "MISSING"
+);
+console.log(
+"CLOUD_NAME:",
+process.env.CLOUD_NAME ? "FOUND" : "MISSING"
+);
+console.log(
+"CLOUD_API_KEY:",
+process.env.CLOUD_API_KEY ? "FOUND" : "MISSING"
+);
+console.log(
+"CLOUD_API_SECRET:",
+process.env.CLOUD_API_SECRET ? "FOUND" : "MISSING"
+);
+console.log("=================================");
 
 /*
 =====================
@@ -42,34 +69,23 @@ MIDDLEWARE
 =====================
 */
 
-
 app.use(cors({
 
-origin:[
+origin:true,
 
-"https://nwaezeakumicah-coder.github.io",
-
-"http://localhost:5500"
-
-],
+credentials:true,
 
 methods:[
-
 "GET",
 "POST",
 "PUT",
-"DELETE"
-
-],
-
-credentials:true
+"DELETE",
+"OPTIONS"
+]
 
 }));
 
-
-
 app.use(express.json());
-
 
 app.use(express.urlencoded({
 
@@ -77,19 +93,11 @@ extended:true
 
 }));
 
-
-
-
-
-
-
-
 /*
 =====================
 CLOUDINARY
 =====================
 */
-
 
 cloudinary.config({
 
@@ -104,54 +112,40 @@ process.env.CLOUD_API_SECRET
 
 });
 
-
-
-
-
 const storage =
 new CloudinaryStorage({
 
 cloudinary,
 
-params:{
+params:async()=>({
 
 folder:"godnechez",
 
 resource_type:"image"
 
-}
+})
 
 });
 
-
-
-
-const upload = multer({
+const upload =
+multer({
 
 storage,
 
 limits:{
 
-fileSize:10 * 1024 * 1024
+fileSize:
+10 * 1024 * 1024
 
 }
 
 });
-
-
-
-
-
-
-
-
 
 /*
 =====================
 EMAIL SYSTEM
 =====================
 */
-
 
 const transporter =
 nodemailer.createTransport({
@@ -160,19 +154,19 @@ service:"gmail",
 
 auth:{
 
-user:process.env.EMAIL_USER,
+user:
+process.env.EMAIL_USER,
 
-pass:process.env.EMAIL_PASS
+pass:
+process.env.EMAIL_PASS
 
 }
 
 });
 
+transporter.verify(
 
-
-
-transporter.verify((error)=>{
-
+(error)=>{
 
 if(error){
 
@@ -181,20 +175,17 @@ console.log(
 error.message
 );
 
-
 }else{
-
 
 console.log(
 "EMAIL SERVER READY"
 );
 
+}
 
 }
 
-
-
-});
+);
 
 /*
 =====================
@@ -202,9 +193,10 @@ DATABASE
 =====================
 */
 
-
 mongoose.connect(
+
 process.env.MONGO_URI
+
 )
 
 .then(()=>{
@@ -224,31 +216,22 @@ error.message
 
 });
 
-
-
-
-
-
-
-
 /*
 =====================
 AUTH MIDDLEWARE
 =====================
 */
 
-
 function protect(req,res,next){
-
 
 const header =
 req.headers.authorization;
 
-
-
 if(!header){
 
 return res.status(401).json({
+
+success:false,
 
 message:"No token provided"
 
@@ -256,16 +239,14 @@ message:"No token provided"
 
 }
 
-
-
 const token =
 header.split(" ")[1];
-
-
 
 if(!token){
 
 return res.status(401).json({
+
+success:false,
 
 message:"Invalid token"
 
@@ -273,10 +254,7 @@ message:"Invalid token"
 
 }
 
-
-
 try{
-
 
 const decoded =
 jwt.verify(
@@ -287,40 +265,55 @@ SECRET
 
 );
 
-
-
 req.admin = decoded;
 
-
 next();
-
-
 
 }
 
 catch(error){
 
-
 return res.status(401).json({
+
+success:false,
 
 message:"Token expired or invalid"
 
 });
 
+}
 
 }
 
+/*
+=====================
+HEALTH CHECK
+=====================
+*/
 
+app.get(
+
+"/health",
+
+(req,res)=>{
+
+res.status(200).json({
+
+success:true,
+
+message:"Server Healthy",
+
+mongo:
+mongoose.connection.readyState === 1,
+
+timestamp:
+new Date()
+
+});
 
 }
 
-
-
-
-
-
-
-
+);
 
 /*
 =====================
@@ -328,9 +321,11 @@ HOME
 =====================
 */
 
+app.get(
 
-app.get("/",(req,res)=>{
+"/",
 
+(req,res)=>{
 
 res.json({
 
@@ -340,16 +335,9 @@ message:"GODNECHEZ Backend Running"
 
 });
 
+}
 
-});
-
-
-
-
-
-
-
-
+);
 
 /*
 =====================
@@ -357,38 +345,28 @@ ADMIN REGISTER
 =====================
 */
 
-
 app.post(
 
 "/api/admin/register",
 
 async(req,res)=>{
 
-
 try{
-
 
 const totalAdmins =
 await Admin.countDocuments();
 
-
-
 if(totalAdmins >= 3){
 
-
 return res.status(400).json({
+
+success:false,
 
 message:"Maximum admin limit reached"
 
 });
 
-
 }
-
-
-
-
-
 
 const exists =
 await Admin.findOne({
@@ -407,27 +385,17 @@ email:req.body.email
 
 });
 
-
-
-
-
-
 if(exists){
 
-
 return res.status(400).json({
+
+success:false,
 
 message:"Admin already exists"
 
 });
 
-
 }
-
-
-
-
-
 
 const hashedPassword =
 await bcrypt.hash(
@@ -437,11 +405,6 @@ req.body.password,
 10
 
 );
-
-
-
-
-
 
 const admin =
 new Admin({
@@ -456,20 +419,9 @@ role:"admin",
 
 approved:false
 
-
 });
 
-
-
-
-
-
 await admin.save();
-
-
-
-
-
 
 res.json({
 
@@ -480,34 +432,28 @@ message:
 
 });
 
-
-
 }
 
 catch(error){
 
+console.log(
+"REGISTER ERROR:",
+error.message
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
 
 }
 
 );
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -515,59 +461,70 @@ ADMIN LOGIN
 =====================
 */
 
-
 app.post(
 
 "/api/admin/login",
 
 async(req,res)=>{
 
-
 try{
 
+console.log(
+
+"LOGIN ATTEMPT:",
+
+req.body.username
+
+);
 
 const admin =
 await Admin.findOne({
 
+$or:[
+
+{
 username:req.body.username
+},
+
+{
+email:req.body.username
+}
+
+]
 
 });
 
+console.log(
 
+"ADMIN FOUND:",
 
+!!admin
 
+);
 
 if(!admin){
 
-
 return res.status(401).json({
+
+success:false,
 
 message:"Invalid credentials"
 
 });
 
-
 }
-
-
-
-
 
 if(!admin.approved){
 
-
 return res.status(403).json({
+
+success:false,
 
 message:"Account waiting for approval"
 
 });
 
-
 }
-
-
-
-
 
 const match =
 await bcrypt.compare(
@@ -578,27 +535,17 @@ admin.password
 
 );
 
-
-
-
-
-
 if(!match){
 
-
 return res.status(401).json({
+
+success:false,
 
 message:"Invalid credentials"
 
 });
 
-
 }
-
-
-
-
-
 
 const token =
 jwt.sign(
@@ -621,37 +568,47 @@ expiresIn:"2h"
 
 );
 
-
-
-
-
-
 res.json({
 
 success:true,
 
-token
+token,
 
-});
+admin:{
 
+id:admin._id,
 
+username:admin.username,
+
+email:admin.email,
+
+role:admin.role
 
 }
 
+});
+
+}
 
 catch(error){
 
+console.log(
+
+"LOGIN ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
@@ -663,16 +620,13 @@ FORGOT PASSWORD OTP
 =====================
 */
 
-
 app.post(
 
 "/api/admin/forgot-password",
 
 async(req,res)=>{
 
-
 try{
-
 
 const admin =
 await Admin.findOne({
@@ -681,26 +635,17 @@ email:req.body.email
 
 });
 
-
-
-
-
 if(!admin){
 
-
 return res.status(404).json({
+
+success:false,
 
 message:"Admin email not found"
 
 });
 
-
 }
-
-
-
-
-
 
 const otp =
 Math.floor(
@@ -711,68 +656,41 @@ Math.random() * 900000
 
 ).toString();
 
-
-
-
-
-
 admin.otp = otp;
-
 
 admin.otpExpiry =
 Date.now() + 10 * 60 * 1000;
 
-
-
-
-
 await admin.save();
-
-
-
-
-
-
 
 await transporter.sendMail({
 
-from:process.env.EMAIL_USER,
+from:
+process.env.EMAIL_USER,
 
+to:
+admin.email,
 
-to:admin.email,
-
-
-subject:"GODNECHEZ Admin Password Reset OTP",
-
-
+subject:
+"GODNECHEZ Admin Password Reset OTP",
 
 html:`
 
 <div style="font-family:Arial">
 
-
 <h2>GODNECHEZ ADMIN</h2>
-
 
 <p>Your password reset OTP is:</p>
 
-
 <h1>${otp}</h1>
 
-
 <p>This OTP expires in 10 minutes.</p>
-
 
 </div>
 
 `
 
 });
-
-
-
-
-
 
 console.log(
 
@@ -782,10 +700,6 @@ admin.email
 
 );
 
-
-
-
-
 res.json({
 
 success:true,
@@ -794,14 +708,9 @@ message:"OTP sent successfully"
 
 });
 
-
-
 }
 
-
-
 catch(error){
-
 
 console.log(
 
@@ -811,30 +720,19 @@ error.message
 
 );
 
-
-
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -842,25 +740,20 @@ VERIFY OTP
 =====================
 */
 
-
 app.post(
 
 "/api/admin/verify-otp",
 
 async(req,res)=>{
 
-
 try{
-
 
 const admin =
 await Admin.findOne({
 
 email:req.body.email,
 
-
 otp:req.body.otp,
-
 
 otpExpiry:{
 
@@ -868,30 +761,19 @@ $gt:Date.now()
 
 }
 
-
 });
-
-
-
-
-
 
 if(!admin){
 
-
 return res.status(400).json({
+
+success:false,
 
 message:"Invalid or expired OTP"
 
 });
 
-
 }
-
-
-
-
-
 
 res.json({
 
@@ -901,37 +783,23 @@ message:"OTP verified"
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
-
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -939,16 +807,13 @@ RESET PASSWORD
 =====================
 */
 
-
 app.post(
 
 "/api/admin/reset-password",
 
 async(req,res)=>{
 
-
 try{
-
 
 const admin =
 await Admin.findOne({
@@ -957,27 +822,17 @@ email:req.body.email
 
 });
 
-
-
-
-
-
 if(!admin){
 
-
 return res.status(404).json({
+
+success:false,
 
 message:"Admin not found"
 
 });
 
-
 }
-
-
-
-
-
 
 admin.password =
 await bcrypt.hash(
@@ -988,27 +843,11 @@ req.body.password,
 
 );
 
-
-
-
-
-
 admin.otp = null;
-
 
 admin.otpExpiry = null;
 
-
-
-
-
-
 await admin.save();
-
-
-
-
-
 
 res.json({
 
@@ -1018,25 +857,19 @@ message:"Password changed successfully"
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
-
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
@@ -1061,22 +894,19 @@ upload.single("image"),
 
 async(req,res)=>{
 
-
 try{
-
 
 if(!req.file){
 
-
 return res.status(400).json({
+
+success:false,
 
 message:"Image required"
 
 });
 
 }
-
-
 
 const design =
 new Design({
@@ -1091,16 +921,7 @@ image:req.file.path
 
 });
 
-
-
-
-
 await design.save();
-
-
-
-
-
 
 res.json({
 
@@ -1110,42 +931,34 @@ data:design
 
 });
 
-
-
 }
-
 
 catch(error){
 
+console.log(
 
-console.log(error);
+"ADD DESIGN ERROR:",
 
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
-// GET DESIGNS
-
+// GET ALL DESIGNS
 
 app.get(
 
@@ -1153,9 +966,7 @@ app.get(
 
 async(req,res)=>{
 
-
 try{
-
 
 const designs =
 await Design.find()
@@ -1166,52 +977,203 @@ createdAt:-1
 
 });
 
-
-
-
-
 res.json({
 
 success:true,
+
+count:designs.length,
 
 data:designs
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"GET DESIGNS ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
+// GET SINGLE DESIGN
+
+app.get(
+
+"/api/designs/:id",
+
+async(req,res)=>{
+
+try{
+
+const design =
+await Design.findById(
+
+req.params.id
+
+);
+
+if(!design){
+
+return res.status(404).json({
+
+success:false,
+
+message:"Design not found"
+
+});
+
+}
+
+res.json({
+
+success:true,
+
+data:design
+
+});
+
+}
+
+catch(error){
+
+console.log(
+
+"GET DESIGN ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:error.message
+
+});
+
+}
+
+}
+
+);
 
 
+// UPDATE DESIGN
 
+app.put(
 
+"/api/designs/:id",
 
+protect,
+
+upload.single("image"),
+
+async(req,res)=>{
+
+try{
+
+const update = {
+
+title:req.body.title,
+
+category:req.body.category,
+
+description:req.body.description
+
+};
+
+if(req.file){
+
+update.image =
+req.file.path;
+
+}
+
+const design =
+await Design.findByIdAndUpdate(
+
+req.params.id,
+
+update,
+
+{
+
+new:true,
+
+runValidators:true
+
+}
+
+);
+
+if(!design){
+
+return res.status(404).json({
+
+success:false,
+
+message:"Design not found"
+
+});
+
+}
+
+res.json({
+
+success:true,
+
+data:design
+
+});
+
+}
+
+catch(error){
+
+console.log(
+
+"UPDATE DESIGN ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:error.message
+
+});
+
+}
+
+}
+
+);
 
 
 // DELETE DESIGN
-
 
 app.delete(
 
@@ -1221,56 +1183,60 @@ protect,
 
 async(req,res)=>{
 
-
 try{
 
-
+const design =
 await Design.findByIdAndDelete(
 
 req.params.id
 
 );
 
+if(!design){
 
+return res.status(404).json({
 
+success:false,
 
+message:"Design not found"
+
+});
+
+}
 
 res.json({
 
 success:true,
 
-message:"Design deleted"
+message:"Design deleted successfully"
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"DELETE DESIGN ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
-
-
-
-
-
 
 
 
@@ -1284,7 +1250,6 @@ TEAM
 
 // ADD TEAM MEMBER
 
-
 app.post(
 
 "/api/team",
@@ -1295,9 +1260,7 @@ upload.single("image"),
 
 async(req,res)=>{
 
-
 try{
-
 
 const member =
 new Team({
@@ -1306,27 +1269,19 @@ name:req.body.name,
 
 position:req.body.position,
 
-category:req.body.category || "staff",
+category:
+req.body.category || "staff",
 
 bio:req.body.bio,
 
-image:req.file ?
-
-req.file.path : ""
+image:
+req.file
+? req.file.path
+: ""
 
 });
 
-
-
-
-
-
 await member.save();
-
-
-
-
-
 
 res.json({
 
@@ -1336,40 +1291,34 @@ data:member
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"ADD TEAM ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
-// GET TEAM
-
+// GET ALL TEAM MEMBERS
 
 app.get(
 
@@ -1377,9 +1326,7 @@ app.get(
 
 async(req,res)=>{
 
-
 try{
-
 
 const team =
 await Team.find()
@@ -1390,53 +1337,108 @@ createdAt:-1
 
 });
 
-
-
-
-
-
 res.json({
 
 success:true,
+
+count:team.length,
 
 data:team
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"GET TEAM ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
+// GET SINGLE TEAM MEMBER
+
+app.get(
+
+"/api/team/:id",
+
+async(req,res)=>{
+
+try{
+
+const member =
+await Team.findById(
+
+req.params.id
+
+);
+
+if(!member){
+
+return res.status(404).json({
+
+success:false,
+
+message:"Team member not found"
+
+});
+
+}
+
+res.json({
+
+success:true,
+
+data:member
+
+});
+
+}
+
+catch(error){
+
+console.log(
+
+"GET TEAM MEMBER ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:error.message
+
+});
+
+}
+
+}
+
+);
 
 
-
-
-
-
-
-// UPDATE TEAM
-
+// UPDATE TEAM MEMBER
 
 app.put(
 
@@ -1448,12 +1450,9 @@ upload.single("image"),
 
 async(req,res)=>{
 
-
 try{
 
-
 const update = {
-
 
 name:req.body.name,
 
@@ -1463,27 +1462,14 @@ category:req.body.category,
 
 bio:req.body.bio
 
-
 };
 
-
-
-
-
-
 if(req.file){
-
 
 update.image =
 req.file.path;
 
-
 }
-
-
-
-
-
 
 const member =
 await Team.findByIdAndUpdate(
@@ -1494,16 +1480,25 @@ update,
 
 {
 
-new:true
+new:true,
+
+runValidators:true
 
 }
 
 );
 
+if(!member){
 
+return res.status(404).json({
 
+success:false,
 
+message:"Team member not found"
 
+});
+
+}
 
 res.json({
 
@@ -1513,40 +1508,34 @@ data:member
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"UPDATE TEAM ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
-// DELETE TEAM
-
+// DELETE TEAM MEMBER
 
 app.delete(
 
@@ -1556,48 +1545,56 @@ protect,
 
 async(req,res)=>{
 
-
 try{
 
-
+const member =
 await Team.findByIdAndDelete(
 
 req.params.id
 
 );
 
+if(!member){
 
+return res.status(404).json({
 
+success:false,
 
+message:"Team member not found"
 
+});
+
+}
 
 res.json({
 
 success:true,
 
-message:"Team member deleted"
+message:"Team member deleted successfully"
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"DELETE TEAM ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
@@ -1620,9 +1617,7 @@ protect,
 
 async(req,res)=>{
 
-
 try{
-
 
 const faq =
 new FAQ({
@@ -1633,16 +1628,7 @@ answer:req.body.answer
 
 });
 
-
-
-
-
 await faq.save();
-
-
-
-
-
 
 res.json({
 
@@ -1652,40 +1638,34 @@ data:faq
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"ADD FAQ ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
-// GET FAQ
-
+// GET ALL FAQS
 
 app.get(
 
@@ -1693,9 +1673,7 @@ app.get(
 
 async(req,res)=>{
 
-
 try{
-
 
 const faqs =
 await FAQ.find()
@@ -1706,53 +1684,190 @@ createdAt:-1
 
 });
 
-
-
-
-
-
 res.json({
 
 success:true,
+
+count:faqs.length,
 
 data:faqs
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"GET FAQ ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
+// GET SINGLE FAQ
+
+app.get(
+
+"/api/faqs/:id",
+
+async(req,res)=>{
+
+try{
+
+const faq =
+await FAQ.findById(
+
+req.params.id
+
+);
+
+if(!faq){
+
+return res.status(404).json({
+
+success:false,
+
+message:"FAQ not found"
+
+});
+
+}
+
+res.json({
+
+success:true,
+
+data:faq
+
+});
+
+}
+
+catch(error){
+
+console.log(
+
+"GET FAQ ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:error.message
+
+});
+
+}
+
+}
+
+);
 
 
+// UPDATE FAQ
 
+app.put(
 
+"/api/faqs/:id",
 
+protect,
+
+async(req,res)=>{
+
+try{
+
+const faq =
+await FAQ.findByIdAndUpdate(
+
+req.params.id,
+
+{
+
+question:req.body.question,
+
+answer:req.body.answer
+
+},
+
+{
+
+new:true,
+
+runValidators:true
+
+}
+
+);
+
+if(!faq){
+
+return res.status(404).json({
+
+success:false,
+
+message:"FAQ not found"
+
+});
+
+}
+
+res.json({
+
+success:true,
+
+data:faq
+
+});
+
+}
+
+catch(error){
+
+console.log(
+
+"UPDATE FAQ ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:error.message
+
+});
+
+}
+
+}
+
+);
 
 
 // DELETE FAQ
-
 
 app.delete(
 
@@ -1762,57 +1877,60 @@ protect,
 
 async(req,res)=>{
 
-
 try{
 
-
+const faq =
 await FAQ.findByIdAndDelete(
 
 req.params.id
 
 );
 
+if(!faq){
 
+return res.status(404).json({
 
+success:false,
 
-
-res.json({
-
-success:true
+message:"FAQ not found"
 
 });
 
+}
 
+res.json({
+
+success:true,
+
+message:"FAQ deleted successfully"
+
+});
 
 }
 
-
-
 catch(error){
 
+console.log(
+
+"DELETE FAQ ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -1821,8 +1939,7 @@ TESTIMONIALS
 */
 
 
-// CLIENT SUBMIT
-
+// CLIENT SUBMIT TESTIMONIAL
 
 app.post(
 
@@ -1830,9 +1947,7 @@ app.post(
 
 async(req,res)=>{
 
-
 try{
-
 
 const testimonial =
 new Testimonial({
@@ -1845,59 +1960,46 @@ approved:false
 
 });
 
-
-
-
-
 await testimonial.save();
-
-
-
-
-
 
 res.json({
 
 success:true,
 
-message:"Submitted successfully"
+message:"Testimonial submitted successfully",
+
+data:testimonial
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"ADD TESTIMONIAL ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
-// PUBLIC APPROVED
-
+// GET APPROVED TESTIMONIALS (PUBLIC)
 
 app.get(
 
@@ -1905,9 +2007,7 @@ app.get(
 
 async(req,res)=>{
 
-
 try{
-
 
 const testimonials =
 await Testimonial.find({
@@ -1922,53 +2022,44 @@ createdAt:-1
 
 });
 
-
-
-
-
-
 res.json({
 
 success:true,
+
+count:testimonials.length,
 
 data:testimonials
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"GET TESTIMONIALS ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
-// ADMIN VIEW
-
+// GET ALL TESTIMONIALS (ADMIN)
 
 app.get(
 
@@ -1978,9 +2069,7 @@ protect,
 
 async(req,res)=>{
 
-
 try{
-
 
 const testimonials =
 await Testimonial.find()
@@ -1991,53 +2080,110 @@ createdAt:-1
 
 });
 
-
-
-
-
-
 res.json({
 
 success:true,
+
+count:testimonials.length,
 
 data:testimonials
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"ADMIN TESTIMONIAL ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
+// GET SINGLE TESTIMONIAL
+
+app.get(
+
+"/api/testimonials/:id",
+
+protect,
+
+async(req,res)=>{
+
+try{
+
+const testimonial =
+await Testimonial.findById(
+
+req.params.id
+
+);
+
+if(!testimonial){
+
+return res.status(404).json({
+
+success:false,
+
+message:"Testimonial not found"
+
+});
+
+}
+
+res.json({
+
+success:true,
+
+data:testimonial
+
+});
+
+}
+
+catch(error){
+
+console.log(
+
+"GET TESTIMONIAL ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:error.message
+
+});
+
+}
+
+}
+
+);
 
 
-
-
-
-
-
-// APPROVE / UPDATE
-
+// APPROVE / UPDATE TESTIMONIAL
 
 app.put(
 
@@ -2047,9 +2193,7 @@ protect,
 
 async(req,res)=>{
 
-
 try{
-
 
 const testimonial =
 await Testimonial.findByIdAndUpdate(
@@ -2064,16 +2208,25 @@ approved:req.body.approved
 
 {
 
-new:true
+new:true,
+
+runValidators:true
 
 }
 
 );
 
+if(!testimonial){
 
+return res.status(404).json({
 
+success:false,
 
+message:"Testimonial not found"
 
+});
+
+}
 
 res.json({
 
@@ -2083,40 +2236,34 @@ data:testimonial
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"UPDATE TESTIMONIAL ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
 // DELETE TESTIMONIAL
-
 
 app.delete(
 
@@ -2126,58 +2273,60 @@ protect,
 
 async(req,res)=>{
 
-
 try{
 
-
+const testimonial =
 await Testimonial.findByIdAndDelete(
 
 req.params.id
 
 );
 
+if(!testimonial){
 
+return res.status(404).json({
 
+success:false,
 
-
-
-res.json({
-
-success:true
+message:"Testimonial not found"
 
 });
 
+}
 
+res.json({
+
+success:true,
+
+message:"Testimonial deleted successfully"
+
+});
 
 }
 
-
-
 catch(error){
 
+console.log(
+
+"DELETE TESTIMONIAL ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
-
-
-
-
-
-
-
-
 
 /*
 =====================
@@ -2188,16 +2337,13 @@ MESSAGES
 
 // SEND MESSAGE
 
-
 app.post(
 
 "/api/messages",
 
 async(req,res)=>{
 
-
 try{
-
 
 const message =
 new Message({
@@ -2212,60 +2358,46 @@ message:req.body.message
 
 });
 
-
-
-
-
-
 await message.save();
-
-
-
-
-
 
 res.json({
 
 success:true,
 
-message:"Message sent"
+message:"Message sent successfully",
+
+data:message
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"SEND MESSAGE ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
-// GET MESSAGES
-
+// GET ALL MESSAGES
 
 app.get(
 
@@ -2275,9 +2407,7 @@ protect,
 
 async(req,res)=>{
 
-
 try{
-
 
 const messages =
 await Message.find()
@@ -2288,53 +2418,110 @@ createdAt:-1
 
 });
 
-
-
-
-
-
 res.json({
 
 success:true,
+
+count:messages.length,
 
 data:messages
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"GET MESSAGES ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
+// GET SINGLE MESSAGE
 
+app.get(
 
+"/api/messages/:id",
 
+protect,
 
+async(req,res)=>{
 
+try{
+
+const message =
+await Message.findById(
+
+req.params.id
+
+);
+
+if(!message){
+
+return res.status(404).json({
+
+success:false,
+
+message:"Message not found"
+
+});
+
+}
+
+res.json({
+
+success:true,
+
+data:message
+
+});
+
+}
+
+catch(error){
+
+console.log(
+
+"GET MESSAGE ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:error.message
+
+});
+
+}
+
+}
+
+);
 
 
 // DELETE MESSAGE
-
 
 app.delete(
 
@@ -2344,57 +2531,60 @@ protect,
 
 async(req,res)=>{
 
-
 try{
 
-
+const message =
 await Message.findByIdAndDelete(
 
 req.params.id
 
 );
 
+if(!message){
 
+return res.status(404).json({
 
+success:false,
 
-
-
-res.json({
-
-success:true
+message:"Message not found"
 
 });
 
+}
 
+res.json({
+
+success:true,
+
+message:"Message deleted successfully"
+
+});
 
 }
 
-
-
 catch(error){
 
+console.log(
+
+"DELETE MESSAGE ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
-
-
-
-
-
-
-
 
 
 /*
@@ -2406,7 +2596,6 @@ ADMIN MANAGEMENT
 
 // VIEW PENDING ADMINS
 
-
 app.get(
 
 "/api/admin/pending",
@@ -2415,64 +2604,121 @@ protect,
 
 async(req,res)=>{
 
-
 try{
-
 
 const admins =
 await Admin.find({
 
 approved:false
 
+})
+
+.select("-password")
+
+.sort({
+
+createdAt:-1
+
 });
-
-
-
-
-
 
 res.json({
 
 success:true,
 
+count:admins.length,
+
 data:admins
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"PENDING ADMINS ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
+// VIEW ALL ADMINS
 
+app.get(
 
+"/api/admin/all",
 
+protect,
 
+async(req,res)=>{
 
+try{
+
+const admins =
+await Admin.find()
+
+.select("-password")
+
+.sort({
+
+createdAt:-1
+
+});
+
+res.json({
+
+success:true,
+
+count:admins.length,
+
+data:admins
+
+});
+
+}
+
+catch(error){
+
+console.log(
+
+"GET ADMINS ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:error.message
+
+});
+
+}
+
+}
+
+);
 
 
 // APPROVE ADMIN
-
 
 app.put(
 
@@ -2482,9 +2728,7 @@ protect,
 
 async(req,res)=>{
 
-
 try{
-
 
 const admin =
 await Admin.findByIdAndUpdate(
@@ -2503,55 +2747,58 @@ new:true
 
 }
 
-);
+).select("-password");
 
+if(!admin){
 
+return res.status(404).json({
 
+success:false,
 
+message:"Admin not found"
 
+});
+
+}
 
 res.json({
 
 success:true,
 
+message:"Admin approved successfully",
+
 data:admin
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"APPROVE ADMIN ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
-
-
-
-
-
-
-
-// DELETE ADMIN
-
+// REJECT / DELETE ADMIN
 
 app.delete(
 
@@ -2561,59 +2808,106 @@ protect,
 
 async(req,res)=>{
 
-
 try{
 
-
+const admin =
 await Admin.findByIdAndDelete(
 
 req.params.id
 
 );
 
+if(!admin){
 
+return res.status(404).json({
 
+success:false,
 
+message:"Admin not found"
 
+});
+
+}
 
 res.json({
 
 success:true,
 
-message:"Admin removed"
+message:"Admin removed successfully"
 
 });
 
-
-
 }
-
-
 
 catch(error){
 
+console.log(
+
+"DELETE ADMIN ERROR:",
+
+error.message
+
+);
 
 res.status(500).json({
+
+success:false,
 
 message:error.message
 
 });
 
-
 }
-
-
 
 }
 
 );
 
 
+/*
+=====================
+404 HANDLER
+=====================
+*/
+
+app.use((req,res)=>{
+
+res.status(404).json({
+
+success:false,
+
+message:"Route not found"
+
+});
+
+});
 
 
+/*
+=====================
+GLOBAL ERROR HANDLER
+=====================
+*/
 
+app.use((error,req,res,next)=>{
 
+console.log(
 
+"SERVER ERROR:",
+
+error.message
+
+);
+
+res.status(500).json({
+
+success:false,
+
+message:"Internal Server Error"
+
+});
+
+});
 
 
 /*
@@ -2622,20 +2916,27 @@ SERVER START
 =====================
 */
 
-
 app.listen(
 
 PORT,
 
 ()=>{
 
-
 console.log(
-
-`GODNECHEZ Backend running on port ${PORT}`
-
+"================================="
 );
 
+console.log(
+`GODNECHEZ Backend running on port ${PORT}`
+);
+
+console.log(
+`Health Check Ready`
+);
+
+console.log(
+"================================="
+);
 
 }
 
